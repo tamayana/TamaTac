@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>TamaTac Ultimate</title>
+<title>TamaTac Ultimate V2 - Rolling Fair</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/peerjs@1.5.3/dist/peerjs.min.js"></script>
 <style>
@@ -15,7 +15,7 @@ h1{font-family:'Playfair Display',serif;font-size:32px;text-align:center;letter-
 .sub{text-align:center;color:rgba(255,255,255,.4);font-size:11px;letter-spacing:3px;text-transform:uppercase;margin:4px 0 18px}
 .input{width:100%;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#fff;font-size:14px;outline:none;margin-bottom:10px}
 .btn{width:100%;padding:13px;border-radius:14px;border:1px solid transparent;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-weight:600}
-.btn-primary{background:#c9a86a;color:#0a0a0f;border-color:#c9a86a}
+.btn-primary{background:#c9a86a;color:#0a0a0f}
 .btn-ghost{background:rgba(255,255,255,.05);color:#fff;border-color:rgba(255,255,255,.1);margin-top:8px}
 .modes{display:flex;gap:8px;margin-bottom:16px;background:rgba(255,255,255,.04);padding:4px;border-radius:14px}
 .mode{flex:1;padding:10px 0;border-radius:10px;text-align:center;font-size:11px;cursor:pointer;color:rgba(255,255,255,.5)}
@@ -25,7 +25,7 @@ h1{font-family:'Playfair Display',serif;font-size:32px;text-align:center;letter-
 .status{text-align:center;padding:9px 14px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:12px;margin:10px 0}
 .players{display:flex;gap:8px;margin:12px 0}
 .player{flex:1;padding:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:14px;text-align:center}
-.player.active{background:rgba(201,168,106,.15);border-color:#c9a86a}
+.player.active{background:rgba(201,168,106,.15);border-color:#c9a86a;transform:translateY(-1px)}
 .board{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:8px}
 .cell{aspect-ratio:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:34px;cursor:pointer}
 .cell.win{background:rgba(201,168,106,.18)!important;border-color:#c9a86a!important}
@@ -40,7 +40,7 @@ h1{font-family:'Playfair Display',serif;font-size:32px;text-align:center;letter-
 .chatInput input{flex:1;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;outline:none;font-size:12px}
 .emojiRow{display:flex;gap:6px;padding:6px 8px;background:rgba(255,255,255,.02);border-top:1px solid rgba(255,255,255,.05);overflow-x:auto}
 .emoji{font-size:18px;cursor:pointer;padding:4px 6px;border-radius:8px;flex-shrink:0}
-.emoji:hover{background:rgba(255,255,255,.1)}
+.badge{display:inline-block;background:#c9a86a;color:#0a0a0f;font-size:9px;padding:2px 6px;border-radius:8px;margin-left:6px;font-weight:700;vertical-align:middle}
 .small{font-size:10px;color:rgba(255,255,255,.35);text-align:center;margin-top:10px}
 </style>
 </head>
@@ -48,17 +48,17 @@ h1{font-family:'Playfair Display',serif;font-size:32px;text-align:center;letter-
 <div class="bg"></div>
 <div class="card">
 <div class="step active" id="stepUser">
-<h1>TAMA<span>TAC</span></h1><p class="sub">Ultimate • Bot + Online + Chat</p>
-<input id="inpUsername" class="input" placeholder="Username kamu... contoh: TamaPonti" maxlength="16">
+<h1>TAMA<span>TAC</span></h1><p class="sub">Ultimate V2 • Rolling Fair Starter</p>
+<input id="inpUsername" class="input" placeholder="Username kamu..." maxlength="16">
 <button class="btn btn-primary" id="btnSaveUser">Masuk →</button>
 </div>
 <div class="step" id="stepChoose">
 <h1>TAMA<span>TAC</span></h1><p class="sub" id="helloUser">Halo</p>
 <button class="btn btn-primary" id="chooseBot">🤖 Main vs BOT</button>
-<button class="btn btn-ghost" id="chooseOnline">🌐 Main Online (vs Teman)</button>
+<button class="btn btn-ghost" id="chooseOnline">🌐 Main Online</button>
 </div>
 <div class="step" id="stepBot">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h1 style="font-size:22px">VS BOT</h1><button class="btn btn-ghost" style="width:auto;padding:6px 10px;font-size:10px;margin:0" id="botBack">← Kembali</button></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h1 style="font-size:22px">VS BOT</h1><button class="btn btn-ghost" style="width:auto;padding:6px 10px;font-size:10px;margin:0" id="botBack">←</button></div>
 <div class="modes"><div class="mode active" data-diff="easy">EASY</div><div class="mode" data-diff="medium">MEDIUM</div><div class="mode" data-diff="hard">HARD</div></div>
 <div class="players"><div class="player active" id="botP1"><b id="botP1Name">Kamu</b><span id="botP1Score">X • 0</span></div><div class="player" id="botP2"><b>Bot</b><span id="botP2Score">O • 0</span></div></div>
 <div class="status" id="botStatus">Giliran kamu (X)</div>
@@ -66,7 +66,7 @@ h1{font-family:'Playfair Display',serif;font-size:32px;text-align:center;letter-
 <div style="display:flex;gap:8px;margin-top:12px"><button class="btn btn-ghost" id="botUndo">Undo</button><button class="btn btn-primary" id="botReset">New Game</button></div>
 </div>
 <div class="step" id="stepLobby">
-<h1>TAMA<span>TAC</span></h1><p class="sub">Online Mode</p>
+<h1>TAMA<span>TAC</span></h1><p class="sub">Online Mode • Rolling Starter</p>
 <button class="btn btn-primary" id="btnCreate">Buat Room Baru</button>
 <div style="display:flex;align-items:center;gap:10px;margin:14px 0;color:rgba(255,255,255,.25);font-size:10px"><div style="flex:1;height:1px;background:rgba(255,255,255,.08)"></div>ATAU<div style="flex:1;height:1px;background:rgba(255,255,255,.08)"></div></div>
 <input id="inpRoom" class="input" placeholder="Kode room teman..."><button class="btn btn-ghost" id="btnJoin">Join Room</button>
@@ -78,20 +78,20 @@ h1{font-family:'Playfair Display',serif;font-size:32px;text-align:center;letter-
 <div style="display:flex;gap:8px"><button class="btn btn-ghost" id="btnCopy" style="margin:0;flex:1">📋 Copy</button><button class="btn btn-ghost" id="waitBack" style="margin:0;flex:1">Batal</button></div>
 <div class="status">Menunggu lawan...</div>
 <div class="players"><div class="player active"><b id="hostName">Kamu</b><span>HOST • X</span></div><div class="player" style="opacity:.3"><b>Menunggu...</b><span>GUEST • O</span></div></div>
+<p class="small">Nanti yang mulai bakal gantian tiap round biar adil!</p>
 </div>
 <div class="step" id="stepGame">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><h1 style="font-size:20px">ONLINE</h1><button class="btn btn-ghost" style="width:auto;padding:6px 10px;font-size:10px;margin:0" id="btnLeave">Keluar</button></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><h1 style="font-size:20px">ONLINE <span id="roundBadge" class="badge">R1</span></h1><button class="btn btn-ghost" style="width:auto;padding:6px 10px;font-size:10px;margin:0" id="btnLeave">Keluar</button></div>
 <div class="status" id="gameStatus">Menghubungkan...</div>
 <div class="players"><div class="player" id="p1Box"><b id="p1Name">Player X</b><span id="p1Mark">X • 0</span></div><div class="player" id="p2Box"><b id="p2Name">Player O</b><span id="p2Mark">O • 0</span></div></div>
 <div class="board" id="board"></div>
-<button class="btn btn-ghost" id="btnRestart" style="margin-top:10px;display:none">🔄 Main Lagi</button>
-<div class="chatBox"><div class="chatMsgs" id="chatMsgs"><div class="msg sys">Chat dimulai!</div></div><div class="emojiRow" id="emojiRow"><div class="emoji">😂</div><div class="emoji">😎</div><div class="emoji">🔥</div><div class="emoji">👏</div><div class="emoji">😭</div><div class="emoji">GG</div><div class="emoji">😡</div><div class="emoji">🤖</div><div class="emoji">💀</div><div class="emoji">❤️</div></div><div class="chatInput"><input id="chatInput" placeholder="Ketik pesan..."><button class="btn btn-primary" id="chatSend" style="width:auto;padding:10px 14px;margin:0">Kirim</button></div></div>
+<button class="btn btn-ghost" id="btnRestart" style="margin-top:10px;display:none">🔄 Main Lagi (Gantian Starter)</button>
+<div class="chatBox"><div class="chatMsgs" id="chatMsgs"><div class="msg sys">Chat dimulai! Rolling starter aktif 🔄</div></div><div class="emojiRow"><div class="emoji">😂</div><div class="emoji">😎</div><div class="emoji">🔥</div><div class="emoji">👏</div><div class="emoji">😭</div><div class="emoji">GG</div><div class="emoji">😡</div><div class="emoji">🤖</div><div class="emoji">💀</div><div class="emoji">❤️</div></div><div class="chatInput"><input id="chatInput" placeholder="Ketik pesan..."><button class="btn btn-primary" id="chatSend" style="width:auto;padding:10px 14px;margin:0">Kirim</button></div></div>
 <p class="small" id="roomInfoSmall"></p>
 </div>
 </div>
 <script>
-// JS sama seperti file ultimate yang gua bikin (bot + peerjs + chat) — sudah include di file yang gua generate
-let myUsername='',peer=null,conn=null,roomId='',isHost=false,myMark='X',turn='X',board=Array(9).fill(''),gameOver=false,scores={X:0,O:0};
+let myUsername='',peer=null,conn=null,roomId='',isHost=false,myMark='X',turn='X',board=Array(9).fill(''),gameOver=false,scores={X:0,O:0},gameRound=0;
 let botDiff='easy',botBoard=Array(9).fill(''),botTurn='X',botOver=false,botScores={X:0,O:0},botHistory=[];
 const $=id=>document.getElementById(id);
 function showStep(id){document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');}
@@ -102,28 +102,29 @@ $('botBack').onclick=()=>showStep('stepChoose');
 $('lobbyBack').onclick=()=>showStep('stepChoose');
 $('waitBack').onclick=()=>{if(peer)try{peer.destroy()}catch(e){};showStep('stepLobby');};
 function initBotBoard(){botBoard=Array(9).fill('');botTurn='X';botOver=false;botHistory=[];renderBotBoard();$('botStatus').textContent='Giliran kamu (X)';}
-function renderBotBoard(){const el=$('botBoard');el.innerHTML='';botBoard.forEach((v,i)=>{const c=document.createElement('div');c.className='cell'+(v?' '+v.toLowerCase():'');c.innerHTML=v?`<small>${v}</small>`:` `;c.onclick=()=>{if(botBoard[i]||botOver||botTurn!=='X')return;botHistory.push([...botBoard]);botBoard[i]='X';let win=checkWinBoard(botBoard);renderBotBoard();if(win){handleBotWin(win);return;}botTurn='O';$('botStatus').textContent='Bot mikir...';setTimeout(botMove,500);};el.appendChild(c);});$('botP1').classList.toggle('active',botTurn==='X');$('botP2').classList.toggle('active',botTurn==='O');}
+function renderBotBoard(){const el=$('botBoard');el.innerHTML='';botBoard.forEach((v,i)=>{const c=document.createElement('div');c.className='cell'+(v?' '+v.toLowerCase():'');c.innerHTML=v?`<small>${v}</small>`:' ';c.onclick=()=>{if(botBoard[i]||botOver||botTurn!=='X')return;botHistory.push([...botBoard]);botBoard[i]='X';let win=checkWinBoard(botBoard);renderBotBoard();if(win){handleBotWin(win);return;}botTurn='O';$('botStatus').textContent='Bot mikir...';setTimeout(botMove,500);};el.appendChild(c);});$('botP1').classList.toggle('active',botTurn==='X');$('botP2').classList.toggle('active',botTurn==='O');}
 function botMove(){let idx;if(botDiff==='easy')idx=Math.random()<0.6?randomEmptyBoard(botBoard):findBestMoveBoard(botBoard);else if(botDiff==='medium')idx=Math.random()<0.3?randomEmptyBoard(botBoard):findBestMoveBoard(botBoard);else idx=findBestMoveBoard(botBoard);if(idx==null)return;botHistory.push([...botBoard]);botBoard[idx]='O';let win=checkWinBoard(botBoard);renderBotBoard();if(win){handleBotWin(win);return;}botTurn='X';$('botStatus').textContent='Giliran kamu (X)';}
 function handleBotWin(win){botOver=true;if(win.line){[...$('botBoard').children].forEach((el,i)=>{if(win.line.includes(i))el.classList.add('win');});}if(win.winner==='D')$('botStatus').textContent='Seri!';else{botScores[win.winner]++;$('botStatus').textContent=win.winner==='X'?'Kamu menang! 🔥':'Bot menang 🤖';}$('botP1Score').textContent=`X • ${botScores.X}`;$('botP2Score').textContent=`O • ${botScores.O}`;}
 function randomEmptyBoard(b){const e=b.map((v,i)=>v==='' ? i : null).filter(v=>v!==null);return e[Math.floor(Math.random()*e.length)];}
 function checkWinBoard(b){const lines=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];for(const l of lines){const [a,b1,c]=l;if(b[a]&&b[a]===b[b1]&&b[a]===b[c])return{winner:b[a],line:l};}if(b.every(v=>v!==''))return{winner:'D',line:[]};return null;}
 function findBestMoveBoard(brd){function minimax(b,isMax){const w=checkWinBoard(b);if(w){if(w.winner==='O')return 10;if(w.winner==='X')return -10;return 0;}let best=isMax?-1000:1000;for(let i=0;i<9;i++){if(b[i]===''){b[i]=isMax?'O':'X';const s=minimax(b,!isMax);b[i]='';best=isMax?Math.max(best,s):Math.min(best,s);}}return best;}let best=-1000,move=null;for(let i=0;i<9;i++){if(brd[i]===''){brd[i]='O';const s=minimax(brd,false);brd[i]='';if(s>best){best=s;move=i;}}}return move??randomEmptyBoard(brd);}
 $('botReset').onclick=initBotBoard;$('botUndo').onclick=()=>{if(botHistory.length===0||botOver)return;botBoard=botHistory.pop();botTurn='X';botOver=false;$('botStatus').textContent='Undo';renderBotBoard();};document.querySelectorAll('[data-diff]').forEach(m=>{m.onclick=()=>{document.querySelectorAll('[data-diff]').forEach(x=>x.classList.remove('active'));m.classList.add('active');botDiff=m.dataset.diff;initBotBoard();};});
-$('btnCreate').onclick=()=>{roomId=Math.random().toString(36).substring(2,8).toUpperCase();isHost=true;myMark='X';initPeer(roomId);$('roomCodeDisplay').textContent=roomId;$('hostName').textContent=myUsername+' (X)';showStep('stepWait');};
+$('btnCreate').onclick=()=>{roomId=Math.random().toString(36).substring(2,8).toUpperCase();isHost=true;myMark='X';gameRound=0;initPeer(roomId);$('roomCodeDisplay').textContent=roomId;$('hostName').textContent=myUsername+' (X)';showStep('stepWait');};
 $('btnCopy').onclick=()=>{navigator.clipboard.writeText($('roomCodeDisplay').textContent).then(()=>{$('btnCopy').textContent='✅';setTimeout(()=>{$('btnCopy').textContent='📋 Copy'},1200);});};
 $('btnJoin').onclick=()=>{const code=$('inpRoom').value.trim().toUpperCase();if(!code){alert('Kode!');return;}roomId=code;isHost=false;myMark='O';initPeer();};
 function initPeer(customId){if(peer)try{peer.destroy()}catch(e){}peer=customId?new Peer(customId):new Peer();peer.on('open',id=>{if(!isHost){const c=peer.connect(roomId,{reliable:true});setupConn(c);$('gameStatus').textContent='Menyambung...';showStep('stepGame');$('roomInfoSmall').textContent='Room: '+roomId+' • Kamu: '+myUsername+' (O)';}});peer.on('connection',c=>{if(isHost)setupConn(c);});peer.on('error',e=>{alert(e.message);showStep('stepLobby');});}
-function setupConn(c){conn=c;conn.on('open',()=>{if(isHost){setTimeout(()=>{conn.send({type:'hello',name:myUsername});},300);startGameAsHost();}else{conn.send({type:'join',name:myUsername});}});conn.on('data',data=>{if(data.type==='join'&&isHost){const g=data.name;document.querySelector('#stepWait .players').children[1].innerHTML=`<b>${g}</b><span>GUEST • O</span>`;document.querySelector('#stepWait .players').children[1].style.opacity='1';addSysMsg(g+' join!');setTimeout(()=>{showStep('stepGame');$('p1Name').textContent=myUsername;$('p2Name').textContent=g;$('roomInfoSmall').textContent='Room: '+roomId+' • Lawan: '+g;initOnlineBoard(true);},600);}if(data.type==='hello'&&!isHost){$('p1Name').textContent=data.name;$('p2Name').textContent=myUsername;$('roomInfoSmall').textContent='Room: '+roomId+' • Lawan: '+data.name;addSysMsg('Terhubung dengan '+data.name);initOnlineBoard(false);}if(data.type==='move'){board=data.board;turn=data.turn;gameOver=data.gameOver;renderOnlineBoard();checkOnlineWin(data.win);}if(data.type==='restart'){board=Array(9).fill('');turn='X';gameOver=false;renderOnlineBoard();$('gameStatus').textContent=isHost?'Giliran kamu (X)':'Giliran lawan (X)';$('btnRestart').style.display='none';addSysMsg('Game diulang!');}if(data.type==='chat'){addOtherMsg(data.name,data.text);}});conn.on('close',()=>{$('gameStatus').textContent='Lawan keluar!';addSysMsg('Lawan keluar');});}
-function startGameAsHost(){showStep('stepGame');$('p1Name').textContent=myUsername;$('roomInfoSmall').textContent='Room: '+roomId;initOnlineBoard(true);}
-function initOnlineBoard(first){board=Array(9).fill('');turn='X';gameOver=false;scores={X:0,O:0};renderOnlineBoard();$('gameStatus').textContent=first?'Giliran kamu (X)':'Giliran Host (X)';$('btnRestart').style.display='none';$('chatMsgs').innerHTML='<div class="msg sys">Chat dimulai!</div>';}
-function renderOnlineBoard(){const bEl=$('board');bEl.innerHTML='';board.forEach((v,i)=>{const cell=document.createElement('div');cell.className='cell'+(v?' '+v.toLowerCase():'');const canPlay=!gameOver&&((isHost&&turn==='X')||(!isHost&&turn==='O'));if(!canPlay)cell.classList.add('disabled');cell.innerHTML=v?`<small>${v}</small>`:` `;cell.onclick=()=>{if(board[i]||gameOver)return;if(isHost&&turn!=='X')return;if(!isHost&&turn!=='O')return;board[i]=myMark;const win=checkWinBoard(board);if(win){gameOver=true;if(win.winner!=='D')scores[win.winner]++;$('btnRestart').style.display='block';}else turn=turn==='X'?'O':'X';renderOnlineBoard();if(win)checkOnlineWin(win);else $('gameStatus').textContent=turn===myMark?'Giliran kamu':'Giliran lawan';if(conn&&conn.open)conn.send({type:'move',board:board,turn:turn,gameOver:gameOver,win:win});};bEl.appendChild(cell);});$('p1Box').classList.toggle('active',turn==='X');$('p2Box').classList.toggle('active',turn==='O');$('p1Mark').textContent=`X • ${scores.X}`;$('p2Mark').textContent=`O • ${scores.O}`;}
-function checkOnlineWin(win){if(!win)return;if(win.line&&win.line.length){[...$('board').children].forEach((el,i)=>{if(win.line.includes(i))el.classList.add('win');});}if(win.winner==='D')$('gameStatus').textContent='Seri!';else $('gameStatus').textContent=`${win.winner} (${win.winner==='X'?$('p1Name').textContent:$('p2Name').textContent}) menang!`;}
+function setupConn(c){conn=c;conn.on('open',()=>{if(isHost){setTimeout(()=>{conn.send({type:'hello',name:myUsername});},300);startGameAsHost();}else{conn.send({type:'join',name:myUsername});}});conn.on('data',data=>{if(data.type==='join'&&isHost){const g=data.name;document.querySelector('#stepWait .players').children[1].innerHTML=`<b>${g}</b><span>GUEST • O</span>`;document.querySelector('#stepWait .players').children[1].style.opacity='1';addSysMsg(g+' join!');setTimeout(()=>{showStep('stepGame');$('p1Name').textContent=myUsername;$('p2Name').textContent=g;$('roomInfoSmall').textContent='Room: '+roomId+' • Lawan: '+g;initOnlineBoard(true);},600);}if(data.type==='hello'&&!isHost){$('p1Name').textContent=data.name;$('p2Name').textContent=myUsername;$('roomInfoSmall').textContent='Room: '+roomId+' • Lawan: '+data.name;addSysMsg('Terhubung dengan '+data.name);gameRound=0;initOnlineBoard(false);}if(data.type==='move'){board=data.board;turn=data.turn;gameOver=data.gameOver;gameRound=data.round!==undefined?data.round:gameRound;updateRoundBadge();renderOnlineBoard();checkOnlineWin(data.win);}if(data.type==='restart'){gameRound=data.round;turn=data.turn;board=Array(9).fill('');gameOver=false;updateRoundBadge();renderOnlineBoard();$('gameStatus').textContent=(turn==='X'?'Host (X)':'Guest (O)')+' mulai duluan — Round '+(gameRound+1)+' 🔄';$('btnRestart').style.display='none';addSysMsg('Round '+(gameRound+1)+' — '+turn+' mulai duluan');}if(data.type==='chat'){addOtherMsg(data.name,data.text);}});conn.on('close',()=>{$('gameStatus').textContent='Lawan keluar!';addSysMsg('Lawan keluar');});}
+function startGameAsHost(){showStep('stepGame');$('p1Name').textContent=myUsername;$('roomInfoSmall').textContent='Room: '+roomId;gameRound=0;initOnlineBoard(true);}
+function initOnlineBoard(first){board=Array(9).fill('');turn=(gameRound%2===0)?'X':'O';gameOver=false;updateRoundBadge();renderOnlineBoard();$('gameStatus').textContent=gameRound%2===0?'Round '+(gameRound+1)+' — Host (X) mulai dulu':'Round '+(gameRound+1)+' — Guest (O) mulai dulu 🔄';$('btnRestart').style.display='none';addSysMsg('Round '+(gameRound+1)+' — '+turn+' mulai duluan');}
+function updateRoundBadge(){$('roundBadge').textContent='R'+(gameRound+1);}
+function renderOnlineBoard(){const bEl=$('board');bEl.innerHTML='';board.forEach((v,i)=>{const cell=document.createElement('div');cell.className='cell'+(v?' '+v.toLowerCase():'');const canPlay=!gameOver&&((isHost&&turn==='X')||(!isHost&&turn==='O'));if(!canPlay)cell.classList.add('disabled');cell.innerHTML=v?`<small>${v}</small>`:' ';cell.onclick=()=>{if(board[i]||gameOver)return;if(isHost&&turn!=='X')return;if(!isHost&&turn!=='O')return;board[i]=myMark;const win=checkWinBoard(board);if(win){gameOver=true;if(win.winner!=='D')scores[win.winner]++;$('btnRestart').style.display='block';}else turn=turn==='X'?'O':'X';renderOnlineBoard();if(win)checkOnlineWin(win);else $('gameStatus').textContent=turn===myMark?'Giliran kamu ('+myMark+')':'Giliran lawan ('+turn+')';if(conn&&conn.open)conn.send({type:'move',board:board,turn:turn,gameOver:gameOver,win:win,round:gameRound});};bEl.appendChild(cell);});$('p1Box').classList.toggle('active',turn==='X');$('p2Box').classList.toggle('active',turn==='O');$('p1Mark').textContent=`X • ${scores.X}`;$('p2Mark').textContent=`O • ${scores.O}`;}
+function checkOnlineWin(win){if(!win)return;if(win.line&&win.line.length){[...$('board').children].forEach((el,i)=>{if(win.line.includes(i))el.classList.add('win');});}if(win.winner==='D')$('gameStatus').textContent='Seri! — Round '+(gameRound+1);else $('gameStatus').textContent=`${win.winner} (${win.winner==='X'?$('p1Name').textContent:$('p2Name').textContent}) menang! — Round `+(gameRound+1);}
 function addMyMsg(t){const d=document.createElement('div');d.className='msg me';d.textContent=t;$('chatMsgs').appendChild(d);$('chatMsgs').scrollTop=$('chatMsgs').scrollHeight;}
 function addOtherMsg(n,t){const d=document.createElement('div');d.className='msg other';d.innerHTML=`<b style="font-size:10px;display:block;opacity:.6">${n}</b>${t}`;$('chatMsgs').appendChild(d);$('chatMsgs').scrollTop=$('chatMsgs').scrollHeight;}
 function addSysMsg(t){const d=document.createElement('div');d.className='msg sys';d.textContent=t;$('chatMsgs').appendChild(d);$('chatMsgs').scrollTop=$('chatMsgs').scrollHeight;}
 function sendChat(){const txt=$('chatInput').value.trim();if(!txt)return;addMyMsg(txt);if(conn&&conn.open)conn.send({type:'chat',name:myUsername,text:txt});$('chatInput').value='';}
 $('chatSend').onclick=sendChat;$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')sendChat();});document.querySelectorAll('.emoji').forEach(em=>{em.onclick=()=>{$('chatInput').value+=em.textContent;sendChat();};});
-$('btnRestart').onclick=()=>{board=Array(9).fill('');turn='X';gameOver=false;renderOnlineBoard();$('gameStatus').textContent=isHost?'Giliran kamu (X)':'Giliran Host (X)';$('btnRestart').style.display='none';if(conn&&conn.open)conn.send({type:'restart'});addSysMsg('Kamu mengulang game');};
+$('btnRestart').onclick=()=>{gameRound++;turn=(gameRound%2===0)?'X':'O';board=Array(9).fill('');gameOver=false;updateRoundBadge();renderOnlineBoard();$('gameStatus').textContent=(turn==='X'?'Host (X)':'Guest (O)')+' mulai duluan — Round '+(gameRound+1)+' 🔄';$('btnRestart').style.display='none';if(conn&&conn.open)conn.send({type:'restart',round:gameRound,turn:turn});addSysMsg('Round '+(gameRound+1)+' — '+turn+' mulai duluan');};
 $('btnLeave').onclick=()=>{if(peer)try{peer.destroy()}catch(e){}location.reload();};
 $('inpUsername').focus();
 </script>
