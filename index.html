@@ -3,204 +3,189 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>TAMA v0.3</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<title>TAMA V0.4</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@600&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/peerjs@1.5.3/dist/peerjs.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{min-height:100vh;background:#07070b;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;color:#fff;padding:14px;overflow:hidden}
-.bg{position:fixed;inset:0;z-index:-1;background:
- radial-gradient(ellipse at 15% 20%,rgba(201,168,106,.18) 0%,transparent 50%),
- radial-gradient(ellipse at 85% 80%,rgba(120,80,200,.15) 0%,transparent 50%),
- radial-gradient(ellipse at 50% 50%,#12121a 0%,#07070b 70%)}
-.card{width:100%;max-width:400px;padding:22px;background:rgba(255,255,255,.04);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);border:1px solid rgba(255,255,255,.07);border-radius:32px;box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06)}
-h1{font-family:'Playfair Display',serif;font-size:36px;font-weight:900;text-align:center;letter-spacing:4px;line-height:1}h1 span{color:#c9a86a;font-style:italic}
-.sub{text-align:center;color:rgba(255,255,255,.45);font-size:10px;letter-spacing:3px;text-transform:uppercase;margin:8px 0 18px;font-weight:600}
-.input{width:100%;padding:16px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#fff;font-size:15px;outline:none;margin-bottom:12px;text-align:center;transition:.2s}
-.input:focus{border-color:rgba(201,168,106,.5);background:rgba(255,255,255,.07)}
-.btn{width:100%;padding:15px;border-radius:16px;border:1px solid transparent;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-weight:700;transition:.2s}
-.btn:active{transform:scale(.97)}
-.btn-primary{background:linear-gradient(135deg,#c9a86a,#e8c99a);color:#0a0a0f;box-shadow:0 8px 24px rgba(201,168,106,.25)}
-.btn-ghost{background:rgba(255,255,255,.06);color:#fff;border-color:rgba(255,255,255,.08);margin-top:10px}
-.btn-ghost:hover{background:rgba(255,255,255,.1)}
-.step{display:none}.step.active{display:block;animation:up .35s ease}
-@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.roomCode{font-family:'Playfair Display',serif;font-size:32px;text-align:center;letter-spacing:8px;background:rgba(255,255,255,.04);border:1px dashed rgba(201,168,106,.4);padding:16px;border-radius:20px;margin:14px 0;color:#c9a86a;font-weight:700}
-.status{text-align:center;padding:12px 14px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06);font-size:12px;margin:12px 0;letter-spacing:.3px}
+body{min-height:100vh;background:#07070b;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;color:#fff;padding:16px}
+.bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(ellipse at 20% 30%,rgba(201,168,106,.15) 0%,transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(100,80,255,.12) 0%,transparent 60%),#07070b}
+.card{width:100%;max-width:400px;padding:24px;background:rgba(255,255,255,.05);backdrop-filter:blur(30px);border:1px solid rgba(255,255,255,.08);border-radius:32px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+h1{font-family:'Playfair Display',serif;font-size:36px;text-align:center;letter-spacing:4px}h1 i{color:#c9a86a;font-style:normal}
+.sub{text-align:center;color:rgba(255,255,255,.45);font-size:10px;letter-spacing:3px;margin:8px 0 20px}
+.input{width:100%;padding:16px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;font-size:16px;text-align:center;outline:none;margin-bottom:12px}
+.btn{width:100%;padding:16px;border-radius:16px;border:0;font-size:12px;letter-spacing:2px;font-weight:700;cursor:pointer}
+.btn-gold{background:linear-gradient(135deg,#c9a86a,#e8c99a);color:#000}
+.btn-dark{background:rgba(255,255,255,.08);color:#fff;margin-top:10px;border:1px solid rgba(255,255,255,.1)}
+.step{display:none}.step.show{display:block}
+.room{font-family:'Playfair Display',serif;font-size:32px;text-align:center;letter-spacing:8px;padding:16px;border:1px dashed rgba(201,168,106,.5);border-radius:20px;margin:14px 0;color:#c9a86a}
+.status{text-align:center;padding:12px;background:rgba(255,255,255,.05);border-radius:16px;font-size:12px;margin:12px 0}
 .players{display:flex;gap:10px;margin:14px 0}
-.player{flex:1;padding:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:18px;text-align:center;transition:.3s}
-.player.active{background:linear-gradient(135deg,rgba(201,168,106,.18),rgba(201,168,106,.08));border-color:#c9a86a;box-shadow:0 0 20px rgba(201,168,106,.15);transform:translateY(-2px)}
-.player b{display:block;font-size:13px;font-family:'Playfair Display',serif}.player span{font-size:11px;opacity:.6;margin-top:2px;display:block}
-.boardWrap{position:relative;width:100%}
-.board{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px;width:100%}
-.cell{aspect-ratio:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:800;cursor:pointer;user-select:none;transition:.15s;font-family:'Playfair Display',serif}
-.cell:hover{background:rgba(255,255,255,.07);transform:translateY(-1px)}
-.cell.x{color:#ff4d5a;text-shadow:0 0 12px rgba(255,77,90,.5)}.cell.o{color:#4d8aff;text-shadow:0 0 12px rgba(77,138,255,.5)}
-.cell.win.x{background:rgba(255,77,90,.18)!important;border-color:#ff4d5a!important;box-shadow:0 0 24px rgba(255,77,90,.5)}
-.cell.win.o{background:rgba(77,138,255,.18)!important;border-color:#4d8aff!important;box-shadow:0 0 24px rgba(77,138,255,.5)}
-.winLine{position:absolute;background:linear-gradient(90deg,#fff,#c9a86a);box-shadow:0 0 12px #fff;z-index:10;border-radius:4px;height:4px}
-.btnRow{display:flex;gap:10px;margin-top:14px}.btnRow .btn{margin:0}
-.dot{width:6px;height:6px;border-radius:50%;background:#c9a86a;display:inline-block;margin-right:6px;animation:blink 1s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.pl{flex:1;padding:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:18px;text-align:center}
+.pl.on{border-color:#c9a86a;background:rgba(201,168,106,.15)}
+.pl b{display:block;font-size:13px}.pl span{font-size:11px;opacity:.6}
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.cell{aspect-ratio:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:800;cursor:pointer;font-family:'Playfair Display',serif}
+.cell.x{color:#ff5a5a}.cell.o{color:#5a8aff}
+.cell.win{box-shadow:0 0 20px currentColor;border-color:currentColor!important;background:rgba(255,255,255,.1)!important}
 </style>
 </head>
 <body>
 <div class="bg"></div>
 <div class="card">
-<div class="step active" id="stepUser"><h1>TAMA<span> v0.3</span></h1><p class="sub">Pontianak • Estetik</p><input id="inpUsername" class="input" placeholder="username kamu" maxlength="16"><button class="btn btn-primary" id="btnSaveUser">MASUK →</button></div>
-<div class="step" id="stepChoose"><h1>TAMA<span> v0.3</span></h1><p class="sub" id="helloUser">HALO</p><button class="btn btn-primary" id="chooseBot">🤖 VS BOT PINTAR</button><button class="btn btn-ghost" id="chooseOnline">🌐 ONLINE PONTIANAK</button></div>
-<div class="step" id="stepBot"><div style="display:flex;justify-content:space-between;align-items:center"><h1 style="font-size:22px">TAMA<span> v0.3</span></h1><button class="btn btn-ghost" style="width:auto;padding:8px 14px;margin:0;font-size:10px" id="botBack">MENU</button></div><div class="players"><div class="player active" id="botP1"><b id="botP1Name">Kamu</b><span id="botP1Score">X • 0</span></div><div class="player" id="botP2"><b>Bot</b><span id="botP2Score">O • 0</span></div></div><div class="status" id="botStatus"><span class="dot"></span>Giliran kamu</div><div class="boardWrap"><div class="board" id="botBoard"></div></div><div class="btnRow"><button class="btn btn-ghost" id="botUndo">↩ UNDO</button><button class="btn btn-primary" id="botReset">MAIN LAGI</button></div></div>
-<div class="step" id="stepLobby"><h1>TAMA<span> v0.3</span></h1><p class="sub">Online • TURN SG</p><button class="btn btn-primary" id="btnCreate">Buat Room Baru</button><input id="inpRoom" class="input" placeholder="kode room..." style="margin-top:16px"><button class="btn btn-ghost" id="btnJoin">Join Room</button><button class="btn btn-ghost" id="lobbyBack" style="background:none;border:none">← Kembali</button></div>
-<div class="step" id="stepWait"><h1 style="font-size:24px">TAMA<span> v0.3</span></h1><p class="sub">Share ke teman</p><div class="roomCode" id="roomCodeDisplay">------</div><div class="btnRow"><button class="btn btn-ghost" id="btnCopy">COPY</button><button class="btn btn-ghost" id="waitBack">BATAL</button></div><div class="status" id="waitStatus"><span class="dot"></span>Menunggu lawan... (TURN aktif)</div></div>
-<div class="step" id="stepGame"><div style="display:flex;justify-content:space-between;align-items:center"><h1 style="font-size:18px">TAMA<span> v0.3</span></h1><button class="btn btn-ghost" style="width:auto;padding:6px 12px;margin:0;font-size:10px" id="btnLeave">Keluar</button></div><div class="status" id="gameStatus">Menghubungkan...</div><div class="players"><div class="player" id="p1Box"><b id="p1Name">X</b><span id="p1Mark">X • 0</span></div><div class="player" id="p2Box"><b id="p2Name">O</b><span id="p2Mark">O • 0</span></div></div><div class="boardWrap"><div class="board" id="board"></div></div><div class="btnRow"><button class="btn btn-primary" id="btnRematch" style="display:none">🔄 MAIN LAGI</button></div></div>
+<!-- STEP 1 -->
+<div class="step show" id="sUser">
+<h1>TAMA <i>V0.4</i></h1><p class="sub">NO ERROR • PONTIANAK</p>
+<input id="inpUser" class="input" placeholder="ketik username" maxlength="12" autocomplete="off">
+<button class="btn btn-gold" id="btnUser">MASUK →</button>
+</div>
+<!-- STEP 2 -->
+<div class="step" id="sMenu">
+<h1>TAMA <i>V0.4</i></h1><p class="sub" id="hiUser">HALO</p>
+<button class="btn btn-gold" id="btnBot">🤖 VS BOT</button>
+<button class="btn btn-dark" id="btnOnline">🌐 ONLINE</button>
+</div>
+<!-- BOT -->
+<div class="step" id="sBot">
+<div style="display:flex;justify-content:space-between"><h1 style="font-size:20px">TAMA <i>V0.4</i></h1><button class="btn btn-dark" style="width:auto;padding:8px 12px;margin:0" id="bBack">MENU</button></div>
+<div class="players"><div class="pl on" id="bp1"><b id="bp1n">Kamu</b><span id="bp1s">X 0</span></div><div class="pl" id="bp2"><b>BOT</b><span id="bp2s">O 0</span></div></div>
+<div class="status" id="bStatus">Giliran X</div>
+<div class="board" id="bBoard"></div>
+<div style="display:flex;gap:10px;margin-top:14px"><button class="btn btn-dark" style="margin:0" id="bUndo">UNDO</button><button class="btn btn-gold" style="margin:0" id="bReset">MAIN LAGI</button></div>
+</div>
+<!-- LOBBY -->
+<div class="step" id="sLobby">
+<h1>TAMA <i>V0.4</i></h1><p class="sub">ONLINE MODE</p>
+<button class="btn btn-gold" id="btnCreate">BUAT ROOM BARU</button>
+<input id="inpRoom" class="input" placeholder="kode room" style="margin-top:16px">
+<button class="btn btn-dark" id="btnJoin">JOIN ROOM</button>
+<button class="btn btn-dark" style="background:none;border:0" id="lBack">← Kembali</button>
+</div>
+<!-- WAIT -->
+<div class="step" id="sWait">
+<h1 style="font-size:24px">TAMA <i>V0.4</i></h1><p class="sub">KODE ROOM KAMU</p>
+<div class="room" id="roomCode">------</div>
+<div style="display:flex;gap:10px"><button class="btn btn-dark" style="margin:0" id="btnCopy">COPY</button><button class="btn btn-dark" style="margin:0" id="wBack">BATAL</button></div>
+<div class="status" id="wStatus">Room aktif, share ke teman!</div>
+</div>
+<!-- GAME ONLINE -->
+<div class="step" id="sGame">
+<div style="display:flex;justify-content:space-between"><h1 style="font-size:18px">TAMA <i>V0.4</i></h1><button class="btn btn-dark" style="width:auto;padding:6px 10px;margin:0" id="gLeave">Keluar</button></div>
+<div class="status" id="gStatus">Menghubungkan...</div>
+<div class="players"><div class="pl" id="gp1"><b id="gp1n">X</b><span id="gp1s">X 0</span></div><div class="pl" id="gp2"><b id="gp2n">O</b><span id="gp2s">O 0</span></div></div>
+<div class="board" id="gBoard"></div>
+<button class="btn btn-gold" id="btnRematch" style="display:none;margin-top:14px">🔄 MAIN LAGI</button>
+</div>
 </div>
 <script>
-let myUsername='',peer=null,conn=null,roomId='',isHost=false,myMark='X',turn='X',board=Array(9).fill(''),gameOver=false,scores={X:0,O:0},gameRound=0;
-let botBoard=Array(9).fill(''),botTurn='X',botOver=false,botScores={X:0,O:0},botHistory=[],botRound=0;
+// ===== GLOBAL =====
+let username='', peer=null, conn=null, roomId='', isHost=false, myMark='X', turn='X', board=[], scores={X:0,O:0}, gameRound=0;
+let bBoard=[], bTurn='X', bOver=false, bScores={X:0,O:0}, bHist=[], bRound=0;
+let audio=null;
 const $=id=>document.getElementById(id);
-let audioCtx=null;
-function getCtx(){if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();return audioCtx;}
-function playSound(t){
+
+// AUDIO - SAFE MODE
+function initAudio(){ if(!audio) audio=new (window.AudioContext||window.webkitAudioContext)(); if(audio.state==='suspended') audio.resume(); }
+function sound(t){
  try{
-  const ctx=getCtx();
-  if(ctx.state==='suspended')ctx.resume();
-  const o=ctx.createOscillator(),g=ctx.createGain();
-  o.connect(g);g.connect(ctx.destination);
-  const now=ctx.currentTime;
-  if(t==='x'){o.frequency.value=440;o.type='sine';g.gain.setValueAtTime(0.25,now);g.gain.exponentialRampToValueAtTime(0.01,now+0.15);o.start(now);o.stop(now+0.15);}
-  else if(t==='o'){o.frequency.value=660;o.type='sine';g.gain.setValueAtTime(0.25,now);g.gain.exponentialRampToValueAtTime(0.01,now+0.15);o.start(now);o.stop(now+0.15);}
-  else if(t==='click'){o.frequency.value=800;o.type='sine';g.gain.setValueAtTime(0.2,now);g.gain.exponentialRampToValueAtTime(0.01,now+0.08);o.start(now);o.stop(now+0.08);}
-  else if(t==='win'){
-   o.frequency.value=523;g.gain.setValueAtTime(0.35,now);o.start(now);o.stop(now+0.25);
-   setTimeout(()=>{try{const c2=getCtx();const o2=c2.createOscillator(),g2=c2.createGain();o2.frequency.value=784;o2.type='sine';o2.connect(g2);g2.connect(c2.destination);g2.gain.setValueAtTime(0.35,c2.currentTime);g2.gain.exponentialRampToValueAtTime(0.01,c2.currentTime+0.4);o2.start();o2.stop(c2.currentTime+0.4);}catch(e){}},180);
-  }
-  else if(t==='draw'){o.frequency.value=180;o.type='sawtooth';g.gain.setValueAtTime(0.2,now);g.gain.exponentialRampToValueAtTime(0.01,now+0.5);o.start(now);o.stop(now+0.5);}
+  if(!audio) return;
+  const o=audio.createOscillator(), g=audio.createGain();
+  o.connect(g); g.connect(audio.destination);
+  const now=audio.currentTime;
+  if(t==='x'){o.frequency.value=440;g.gain.setValueAtTime(0.25,now);g.gain.linearRampToValueAtTime(0.01,now+0.15);o.start(now);o.stop(now+0.15);}
+  if(t==='o'){o.frequency.value=660;g.gain.setValueAtTime(0.25,now);g.gain.linearRampToValueAtTime(0.01,now+0.15);o.start(now);o.stop(now+0.15);}
+  if(t==='win'){o.frequency.value=523;g.gain.setValueAtTime(0.3,now);o.start(now);o.stop(now+0.2); setTimeout(()=>{try{let o2=audio.createOscillator(),g2=audio.createGain();o2.frequency.value=784;o2.connect(g2);g2.connect(audio.destination);g2.gain.setValueAtTime(0.3,audio.currentTime);o2.start();o2.stop(audio.currentTime+0.3);}catch(e){}},150);}
+  if(t==='draw'){o.frequency.value=150;o.type='sawtooth';g.gain.setValueAtTime(0.2,now);o.start(now);o.stop(now+0.4);}
+  if(t==='click'){o.frequency.value=800;g.gain.setValueAtTime(0.15,now);o.start(now);o.stop(now+0.07);}
  }catch(e){}
 }
-function showStep(id){document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');}
-function checkWin(b){const L=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];for(const l of L){const[a,b1,c]=l;if(b[a]&&b[a]===b[b1]&&b[a]===b[c])return{winner:b[a],line:l};}if(b.every(v=>v!==''))return{winner:'D',line:[]};return null;}
-function drawLine(el,line){el.querySelectorAll('.winLine').forEach(e=>e.remove());if(!line||line.length!==3)return;const w=el.offsetWidth,gap=10,cw=(w-gap*2)/3,cent=[];for(let i=0;i<9;i++){let r=Math.floor(i/3),c=i%3;cent[i]={x:c*(cw+gap)+cw/2,y:r*(cw+gap)+cw/2};}let a=cent[line[0]],c=cent[line[2]],dx=c.x-a.x,dy=c.y-a.y,len=Math.sqrt(dx*dx+dy*dy),ang=Math.atan2(dy,dx)*180/Math.PI;let d=document.createElement('div');d.className='winLine';d.style.width=len+'px';d.style.left=a.x+'px';d.style.top=a.y+'px';d.style.transform='rotate('+ang+'deg)';d.style.transformOrigin='0 50%';el.appendChild(d);}
-function initBotBoard(){botBoard=Array(9).fill('');botTurn=(botRound%2===0)?'X':'O';botOver=false;botHistory=[];renderBotBoard();$('botStatus').innerHTML='<span class="dot"></span>'+(botTurn==='X'?'Giliran kamu (X)':'Bot mulai (O)');if(botTurn==='O')setTimeout(botMove,700);}
-function renderBotBoard(){let el=$('botBoard');el.innerHTML='';let win=checkWin(botBoard);botBoard.forEach((v,i)=>{let c=document.createElement('div');c.className='cell'+(v?' '+v.toLowerCase():'');if(win&&win.line.includes(i))c.classList.add('win');c.textContent=v;c.onclick=()=>{if(botOver||win||botBoard[i]||botTurn!=='X')return;botHistory.push([...botBoard]);botBoard[i]='X';playSound('x');let w=checkWin(botBoard);renderBotBoard();if(w){handleBotWin(w);return;}botTurn='O';$('botStatus').innerHTML='<span class="dot"></span>Bot mikir...';setTimeout(botMove,500);};el.appendChild(c);});if(win&&win.line)drawLine(el,win.line);}
-function handleBotWin(win){botOver=true;if(win.winner!=='D')botScores[win.winner]++;if(win.winner==='D'){playSound('draw');$('botStatus').innerHTML='🤝 Seri!';}else{playSound('win');$('botStatus').innerHTML='🏆 '+win.winner+' MENANG!';}$('botP1Score').textContent='X • '+botScores.X;$('botP2Score').textContent='O • '+botScores.O;}
-function botMove(){if(botOver)return;let win=checkWin(botBoard);if(win){handleBotWin(win);return;}function fm(p){for(let i=0;i<9;i++){if(botBoard[i]===''){botBoard[i]=p;let w=checkWin(botBoard);botBoard[i]='';if(w&&w.winner===p)return i;}}return null;}let m=fm('O')||fm('X');if(m===null){let e=botBoard.map((v,i)=>v===''?i:null).filter(v=>v!==null);m=e[Math.floor(Math.random()*e.length)];}if(m==null)return;botHistory.push([...botBoard]);botBoard[m]='O';playSound('o');let w=checkWin(botBoard);renderBotBoard();if(w){handleBotWin(w);return;}botTurn='X';$('botStatus').innerHTML='<span class="dot"></span>Giliran kamu';}
-document.addEventListener('DOMContentLoaded',()=>{
-$('btnSaveUser').onclick=()=>{let v=$('inpUsername').value.trim();if(v.length<2){alert('Username min 2 huruf');return;}myUsername=v;$('helloUser').textContent='HALO '+v.toUpperCase();playSound('click');showStep('stepChoose');};
-$('chooseBot').onclick=()=>{playSound('click');showStep('stepBot');$('botP1Name').textContent=myUsername;initBotBoard();};
-$('chooseOnline').onclick=()=>{playSound('click');showStep('stepLobby');};
-$('botBack').onclick=()=>{playSound('click');showStep('stepChoose');};
-$('lobbyBack').onclick=()=>{playSound('click');showStep('stepChoose');};
-$('waitBack').onclick=()=>{if(peer)try{peer.destroy()}catch(e){};playSound('click');showStep('stepLobby');};
-$('botReset').onclick=()=>{botRound++;playSound('click');initBotBoard();};
-$('botUndo').onclick=()=>{if(!botHistory.length||botOver)return;botBoard=botHistory.pop();botTurn='X';botOver=false;playSound('click');renderBotBoard();$('botStatus').innerHTML='<span class="dot"></span>Giliran kamu';};
-$('btnCreate').onclick=()=>{roomId=Math.random().toString(36).substring(2,8).toUpperCase();isHost=true;myMark='X';initPeer(roomId);$('roomCodeDisplay').textContent=roomId;showStep('stepWait');playSound('click');};
-$('btnCopy').onclick=()=>{navigator.clipboard.writeText($('roomCodeDisplay').textContent);$('btnCopy').textContent='✓ COPIED';playSound('click');setTimeout(()=>$('btnCopy').textContent='COPY',1200);};
-$('btnJoin').onclick=()=>{let c=$('inpRoom').value.trim().toUpperCase();if(!c){alert('Isi kode room dulu');return;}roomId=c;isHost=false;myMark='O';playSound('click');initPeer();};
-let to=null;
-function initPeer(customId){
- if(peer)try{peer.destroy()}catch(e){}
- const cfg={
-  config:{
-   iceServers:[
-    {urls:"stun:stun.l.google.com:19302"},
-    {urls:"stun:stun1.l.google.com:19302"},
-    {urls:"turn:openrelay.metered.ca:80",username:"openrelayproject",credential:"openrelayproject"},
-    {urls:"turn:openrelay.metered.ca:443",username:"openrelayproject",credential:"openrelayproject"},
-    {urls:"turn:openrelay.metered.ca:443?transport=tcp",username:"openrelayproject",credential:"openrelayproject"}
-   ],
-   iceTransportPolicy:'all',
-   iceCandidatePoolSize:10
-  }
- };
- 
- // Kalau jadi HOST, pake custom ID
+function show(id){ document.querySelectorAll('.step').forEach(s=>s.classList.remove('show')); $(id).classList.add('show'); }
+function winCheck(b){ const L=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]; for(let l of L){ if(b[l[0]]&&b[l[0]]===b[l[1]]&&b[l[0]]===b[l[2]]) return {w:b[l[0]],line:l}; } if(b.every(v=>v)) return {w:'D',line:[]}; return null; }
+
+// ===== BOT =====
+function initBot(){ bBoard=Array(9).fill(''); bTurn=bRound%2===0?'X':'O'; bOver=false; bHist=[]; renderBot(); $('bStatus').textContent=bTurn==='X'?'Giliran kamu (X)':'Bot mulai'; if(bTurn==='O') setTimeout(botMove,600); }
+function renderBot(){ const el=$('bBoard'); el.innerHTML=''; const win=winCheck(bBoard); bBoard.forEach((v,i)=>{ let d=document.createElement('div'); d.className='cell '+(v?v.toLowerCase():''); if(win&&win.line.includes(i)) d.classList.add('win'); d.textContent=v; d.onclick=()=>{ if(bOver||win||bBoard[i]||bTurn!=='X') return; bHist.push([...bBoard]); bBoard[i]='X'; initAudio(); sound('x'); let w=winCheck(bBoard); renderBot(); if(w){botEnd(w);return;} bTurn='O'; $('bStatus').textContent='Bot mikir...'; setTimeout(botMove,500); }; el.appendChild(d); }); $('bp1').classList.toggle('on',bTurn==='X'); $('bp2').classList.toggle('on',bTurn==='O'); }
+function botEnd(w){ bOver=true; if(w.w!=='D') bScores[w.w]++; if(w.w==='D'){sound('draw');$('bStatus').textContent='Seri!';} else {sound('win');$('bStatus').textContent=w.w+' MENANG!';} $('bp1s').textContent='X '+bScores.X; $('bp2s').textContent='O '+bScores.O; }
+function botMove(){ if(bOver) return; let w=winCheck(bBoard); if(w){botEnd(w);return;} function find(p){ for(let i=0;i<9;i++){ if(!bBoard[i]){ bBoard[i]=p; let r=winCheck(bBoard); bBoard[i]=''; if(r&&r.w===p) return i; } } return null; } let m=find('O')||find('X'); if(m===null){ let e=bBoard.map((v,i)=>!v?i:null).filter(v=>v!==null); m=e[Math.floor(Math.random()*e.length)]; } bHist.push([...bBoard]); bBoard[m]='O'; initAudio(); sound('o'); w=winCheck(bBoard); renderBot(); if(w){botEnd(w);return;} bTurn='X'; $('bStatus').textContent='Giliran kamu'; }
+
+// ===== ONLINE =====
+function initOnline(){ board=Array(9).fill(''); turn=gameRound%2===0?'X':'O'; renderOn(); $('btnRematch').style.display='none'; }
+function renderOn(){
+ const el=$('gBoard'); el.innerHTML=''; const win=winCheck(board);
+ board.forEach((v,i)=>{
+  let d=document.createElement('div'); d.className='cell '+(v?v.toLowerCase():''); if(win&&win.line.includes(i)) d.classList.add('win'); d.textContent=v;
+  let can=!win&&!bOver&&((isHost&&turn==='X')||(!isHost&&turn==='O'));
+  if(!can) d.style.opacity='.5';
+  d.onclick=()=>{
+   if(board[i]||win) return;
+   if(isHost&&turn!=='X') return; if(!isHost&&turn!=='O') return;
+   board[i]=myMark; initAudio(); if(myMark==='X') sound('x'); else sound('o');
+   let w=winCheck(board); if(w){ if(w.w!=='D') scores[w.w]++; if(w.w==='D') sound('draw'); else sound('win'); } else { turn=turn==='X'?'O':'X'; }
+   renderOn(); if(conn&&conn.open) conn.send({t:'move',b:board,turn:turn,w:w,m:myMark});
+  };
+  el.appendChild(d);
+ });
+ $('gp1').classList.toggle('on',turn==='X'); $('gp2').classList.toggle('on',turn==='O');
+ $('gp1s').textContent='X '+scores.X; $('gp2s').textContent='O '+scores.O;
+ if(win){ $('gStatus').textContent=win.w==='D'?'Seri!':win.w+' MENANG!'; $('btnRematch').style.display='block'; } else { $('gStatus').textContent='Giliran '+turn; }
+}
+
+function startPeer(customId){
+ if(peer) try{peer.destroy()}catch(e){}
+ const cfg={config:{iceServers:[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"},{urls:"turn:openrelay.metered.ca:80",username:"openrelayproject",credential:"openrelayproject"},{urls:"turn:openrelay.metered.ca:443",username:"openrelayproject",credential:"openrelayproject"},{urls:"turn:openrelay.metered.ca:443?transport=tcp",username:"openrelayproject",credential:"openrelayproject"}]}};
  if(customId){
   peer=new Peer(customId,cfg);
-  $('gameStatus').innerHTML='<span class="dot"></span>Buat room '+customId+'...';
-  $('waitStatus').innerHTML='<span class="dot"></span>Room siap, share kode!';
-  peer.on('open',id=>{
-   console.log('Host ready:',id);
-   clearTimeout(to);
-   $('waitStatus').innerHTML='<span class="dot"></span>✅ Room '+id+' AKTIF - Suruh teman join sekarang!';
-  });
-  peer.on('connection',c=>{
-   clearTimeout(to);
-   console.log('Ada yang join!');
-   $('waitStatus').innerHTML='<span class="dot"></span>Teman ditemukan! Masuk...';
-   setupConn(c);
-  });
-  peer.on('error',e=>{
-   console.log('Host error:',e);
-   if(e.type==='unavailable-id'){
-    alert('Kode '+customId+' lagi dipake, bikin baru lagi');
-    showStep('stepLobby');
+  peer.on('open',id=>{$('wStatus').textContent='✅ Room '+id+' aktif! Share kode!';});
+  peer.on('connection',c=>{ conn=c; conn.on('open',()=>{ show('sGame'); $('gp1n').textContent=username; initOnline(); conn.send({t:'hello',name:username}); }); conn.on('data',handle); });
+  peer.on('error',e=>{ if(e.type==='unavailable-id'){ alert('Kode dipakai, buat baru'); show('sLobby'); } });
+ } else {
+  peer=new Peer(cfg);
+  peer.on('open',()=>{
+   let tries=0;
+   function tryC(){
+    tries++; if(tries>6){ alert('Room '+roomId+' tidak ditemukan'); show('sLobby'); return; }
+    $('gStatus').textContent='Cari '+roomId+'... ('+tries+'/6)';
+    try{
+     const c=peer.connect(roomId,{reliable:true});
+     let ok=false;
+     c.on('open',()=>{ ok=true; conn=c; conn.on('data',handle); show('sGame'); c.send({t:'join',name:username}); });
+     setTimeout(()=>{ if(!ok) tryC(); },3000);
+    }catch(e){ setTimeout(tryC,2000); }
    }
+   tryC();
   });
-  // Timeout 60 detik buat host
-  to=setTimeout(()=>{
-   $('waitStatus').innerHTML='<span class="dot"></span>⌛ Lama nunggu, coba buat room baru';
-  },60000);
-  return;
  }
-
- // Kalau jadi GUEST (Join)
- peer=new Peer(cfg);
- $('gameStatus').innerHTML='<span class="dot"></span>Siap join...';
- 
- peer.on('open',myId=>{
-  console.log('Guest ID:',myId,' mau join:',roomId);
-  clearTimeout(to);
-  $('gameStatus').innerHTML='<span class="dot"></span>Cari room '+roomId+'...';
-  
-  let attempts=0;
-  function tryConnect(){
-   attempts++;
-   if(attempts>8){
-    alert('Room '+roomId+' gak ketemu. Pastikan teman sudah buat room dan kode bener. Kode harus HURUF BESAR!');
-    showStep('stepLobby');
-    return;
-   }
-   $('gameStatus').innerHTML='<span class="dot"></span>Connect ke '+roomId+'... ('+attempts+'/8)';
-   try{
-    const c=peer.connect(roomId,{
-     reliable:true,
-     serialization:'json'
-    });
-    
-    let connected=false;
-    c.on('open',()=>{
-     connected=true;
-     console.log('Connected to host!');
-     setupConn(c);
-     showStep('stepGame');
-    });
-    c.on('error',err=>{
-     console.log('Connect error:',err);
-     if(!connected) setTimeout(tryConnect,2500);
-    });
-    
-    // Kalau 4 detik gak connect, coba lagi
-    setTimeout(()=>{
-     if(!connected) tryConnect();
-    },4000);
-    
-   }catch(e){
-    console.log('Catch error:',e);
-    setTimeout(tryConnect,2000);
-   }
-  }
-  
-  // Tunggu 1 detik biar PeerJS siap, baru connect
-  setTimeout(tryConnect,1000);
- });
-
- peer.on('error',e=>{
-  console.log('Guest peer error:',e);
-  $('gameStatus').innerHTML='<span class="dot"></span>Error: '+e.type;
- });
-
- to=setTimeout(()=>{
-  alert('Timeout - PeerJS lagi sibuk, coba lagi 1 menit lagi');
-  showStep('stepLobby');
- },40000);
 }
+function handle(d){
+ if(d.t==='join'){ $('gp2n').textContent=d.name; $('gp1n').textContent=username; $('gStatus').textContent='Lawan masuk!'; }
+ if(d.t==='hello'){ $('gp1n').textContent=d.name; $('gp2n').textContent=username; }
+ if(d.t==='move'){ board=d.b; turn=d.turn; if(d.m==='X') sound('x'); else if(d.m==='O') sound('o'); if(d.w&&d.w.w!=='D'&&!d.w.draw) { if(d.w.w!=='D') scores[d.w.w]++; if(d.w.w==='D') sound('draw'); else sound('win'); } renderOn(); if(d.w) { if(d.w.w==='D') sound('draw'); else if(d.w.w) sound('win'); } }
+ if(d.t==='rematch'){ gameRound++; initOnline(); }
+}
+
+// ===== EVENTS - PASTI JALAN =====
+document.addEventListener('DOMContentLoaded',()=>{
+ $('btnUser').addEventListener('click',()=>{
+  const v=$('inpUser').value.trim();
+  if(v.length<2){ alert('Username minimal 2 huruf'); return; }
+  username=v;
+  $('hiUser').textContent='HALO '+v.toUpperCase();
+  show('sMenu');
+  try{ initAudio(); sound('click'); }catch(e){}
+ });
+ $('btnBot').addEventListener('click',()=>{ show('sBot'); $('bp1n').textContent=username; initBot(); try{sound('click')}catch(e){} });
+ $('btnOnline').addEventListener('click',()=>{ show('sLobby'); try{sound('click')}catch(e){} });
+ $('bBack').addEventListener('click',()=>show('sMenu'));
+ $('lBack').addEventListener('click',()=>show('sMenu'));
+ $('wBack').addEventListener('click',()=>{ if(peer) try{peer.destroy()}catch(e){}; show('sLobby'); });
+ $('bReset').addEventListener('click',()=>{ bRound++; initBot(); try{sound('click')}catch(e){} });
+ $('bUndo').addEventListener('click',()=>{ if(!bHist.length||bOver) return; bBoard=bHist.pop(); bTurn='X'; bOver=false; renderBot(); });
+ $('btnCreate').addEventListener('click',()=>{ roomId=Math.random().toString(36).substring(2,6).toUpperCase(); isHost=true; myMark='X'; $('roomCode').textContent=roomId; show('sWait'); startPeer(roomId); try{sound('click')}catch(e){} });
+ $('btnCopy').addEventListener('click',()=>{ navigator.clipboard.writeText($('roomCode').textContent); $('btnCopy').textContent='COPIED!'; setTimeout(()=>$('btnCopy').textContent='COPY',1000); });
+ $('btnJoin').addEventListener('click',()=>{ const c=$('inpRoom').value.trim().toUpperCase(); if(!c){alert('Isi kode');return;} roomId=c; isHost=false; myMark='O'; show('sGame'); startPeer(); });
+ $('btnRematch').addEventListener('click',()=>{ gameRound++; initOnline(); if(conn&&conn.open) conn.send({t:'rematch'}); try{sound('click')}catch(e){} });
+ $('gLeave').addEventListener('click',()=>location.reload());
+});
+</script>
+</body>
+</html>
