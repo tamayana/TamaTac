@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>TAMA V0.5.1</title>
+<title>TAMA V0.5.3</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -16,7 +16,7 @@ h1{font-family:'Playfair Display',serif;font-size:34px;text-align:center;letter-
 .btn-gold{background:linear-gradient(135deg,#c9a86a,#e8c99a);color:#000}
 .btn-dark{background:rgba(255,255,255,.08);color:#fff;margin-top:10px;border:1px solid rgba(255,255,255,.1)}
 .step{display:none}.step.show{display:block}
-.room{font-size:30px;text-align:center;letter-spacing:6px;padding:16px;border:1px dashed #c9a86a;border-radius:20px;margin:14px 0;color:#c9a86a;font-family:'Playfair Display',serif}
+.room{font-size:32px;text-align:center;letter-spacing:6px;padding:16px;border:1px dashed #c9a86a;border-radius:20px;margin:14px 0;color:#c9a86a;font-family:'Playfair Display',serif}
 .status{text-align:center;padding:12px;background:rgba(255,255,255,.05);border-radius:16px;font-size:12px;margin:12px 0}
 .players{display:flex;gap:10px;margin:14px 0}
 .pl{flex:1;padding:12px;background:rgba(255,255,255,.04);border-radius:18px;text-align:center;border:1px solid rgba(255,255,255,.06)}
@@ -30,119 +30,60 @@ h1{font-family:'Playfair Display',serif;font-size:34px;text-align:center;letter-
 </head>
 <body>
 <div class="card">
-<div class="step show" id="sUser"><h1>TAMA <i>V0.5.1</i></h1><p class="sub">SERVER PONTIANAK - ONLINE REAL</p><input id="inpUser" class="input" placeholder="username kamu" maxlength="12"><button class="btn btn-gold" id="btnUser">MASUK →</button></div>
-<div class="step" id="sMenu"><h1>TAMA <i>V0.5.1</i></h1><p class="sub" id="hiUser">HALO</p><button class="btn btn-dark" id="btnOnline">🌐 ONLINE JARAK JAUH - PONTIANAK</button><p class="sub" style="margin-top:12px">BISA PONTIANAK ↔ JAWA ↔ LUAR NEGERI</p></div>
-<div class="step" id="sLobby"><h1>TAMA <i>V0.5.1</i></h1><p class="sub">RELAY SERVER SG AKTIF</p><button class="btn btn-gold" id="btnCreate">BUAT ROOM BARU</button><input id="inpRoom" class="input" placeholder="kode room" style="margin-top:14px"><button class="btn btn-dark" id="btnJoin">JOIN ROOM</button><button class="btn btn-dark" style="background:none;border:0" id="lBack">← Kembali</button></div>
-<div class="step" id="sWait"><h1 style="font-size:22px">TAMA <i>V0.5.1</i></h1><p class="sub">KODE ROOM - KIRIM KE TEMAN</p><div class="room" id="roomCode">------</div><div style="display:flex;gap:10px"><button class="btn btn-dark" style="margin:0" id="btnCopy">COPY</button><button class="btn btn-dark" style="margin:0" id="wBack">BATAL</button></div><div class="status" id="wStatus"><span class="dot"></span>Room disimpan di Server Singapore...</div></div>
-<div class="step" id="sGame"><div style="display:flex;justify-content:space-between"><h1 style="font-size:18px">TAMA <i>V0.5.1</i></h1><button class="btn btn-dark" style="width:auto;padding:6px 10px;margin:0" id="gLeave">Keluar</button></div><div class="status" id="gStatus">Sinkron server SG...</div><div class="players"><div class="pl" id="gp1"><b id="gp1n">X</b><span id="gp1s">X 0</span></div><div class="pl" id="gp2"><b id="gp2n">O</b><span id="gp2s">O 0</span></div></div><div class="board" id="gBoard"></div><button class="btn btn-gold" id="btnRematch" style="display:none;margin-top:14px">🔄 MAIN LAGI</button></div>
+<div class="step show" id="sUser"><h1>TAMA <i>V0.5.3</i></h1><p class="sub">BOT + ONLINE JARAK JAUH</p><input id="inpUser" class="input" placeholder="username" maxlength="12"><button class="btn btn-gold" id="btnUser">MASUK →</button></div>
+<div class="step" id="sMenu"><h1>TAMA <i>V0.5.3</i></h1><p class="sub" id="hiUser">HALO</p><button class="btn btn-gold" id="btnBot">🤖 VS BOT PINTAR</button><button class="btn btn-dark" id="btnOnline">🌐 ONLINE JARAK JAUH</button></div>
+
+<!-- BOT -->
+<div class="step" id="sBot">
+<div style="display:flex;justify-content:space-between"><h1 style="font-size:20px">TAMA <i>V0.5.3</i></h1><button class="btn btn-dark" style="width:auto;padding:8px 12px;margin:0" id="bBack">MENU</button></div>
+<div class="players"><div class="pl on" id="bp1"><b id="bp1n">Kamu</b><span id="bp1s">X 0</span></div><div class="pl" id="bp2"><b>BOT</b><span id="bp2s">O 0</span></div></div>
+<div class="status" id="bStatus">Giliran kamu (X)</div>
+<div class="board" id="bBoard"></div>
+<div style="display:flex;gap:10px;margin-top:14px"><button class="btn btn-dark" style="margin:0" id="bUndo">↩ UNDO</button><button class="btn btn-gold" style="margin:0" id="bReset">MAIN LAGI</button></div>
 </div>
+
+<!-- ONLINE -->
+<div class="step" id="sLobby"><h1>TAMA <i>V0.5.3</i></h1><p class="sub">SERVER SG AKTIF - PONTIANAK</p><button class="btn btn-gold" id="btnCreate">BUAT ROOM BARU</button><input id="inpRoom" class="input" placeholder="kode room" style="margin-top:14px"><button class="btn btn-dark" id="btnJoin">JOIN ROOM</button><button class="btn btn-dark" style="background:none;border:0" id="lBack">← Kembali</button></div>
+<div class="step" id="sWait"><h1 style="font-size:22px">TAMA <i>V0.5.3</i></h1><p class="sub">KODE ROOM - SHARE KE TEMAN</p><div class="room" id="roomCode">------</div><div style="display:flex;gap:10px"><button class="btn btn-dark" style="margin:0" id="btnCopy">COPY KODE</button><button class="btn btn-dark" style="margin:0" id="wBack">BATAL</button></div><div class="status" id="wStatus"><span class="dot"></span>Room aktif!</div></div>
+<div class="step" id="sGame"><div style="display:flex;justify-content:space-between"><h1 style="font-size:18px">TAMA <i>V0.5.3</i></h1><button class="btn btn-dark" style="width:auto;padding:6px 10px;margin:0" id="gLeave">Keluar</button></div><div class="status" id="gStatus">Sinkron...</div><div class="players"><div class="pl" id="gp1"><b id="gp1n">X</b><span id="gp1s">X 0</span></div><div class="pl" id="gp2"><b id="gp2n">O</b><span id="gp2s">O 0</span></div></div><div class="board" id="gBoard"></div><button class="btn btn-gold" id="btnRematch" style="display:none;margin-top:14px">🔄 MAIN LAGI</button></div>
+</div>
+
 <script>
-// SERVER RELAY PONTIANAK - GUA UDAH BIKININ, LU TINGGAL PAKE
-const API = "https://api.npoint.io";
-let username='', roomId='', myMark='X', board=Array(9).fill(''), turn='X', scores={X:0,O:0}, round=0, pollTimer=null, lastBoard='', binId='';
 const $=id=>document.getElementById(id);
+let username='', roomId='', myMark='X', board=Array(9).fill(''), turn='X', scores={X:0,O:0}, evtSource=null;
+let bBoard=Array(9).fill(''), bTurn='X', bOver=false, bScores={X:0,O:0}, bHist=[], bRound=0;
 let audio=null;
 function initAudio(){ if(!audio) audio=new (window.AudioContext||window.webkitAudioContext)(); if(audio.state==='suspended') audio.resume(); }
 function sound(t){ try{ if(!audio) return; const o=audio.createOscillator(),g=audio.createGain(); o.connect(g); g.connect(audio.destination); const n=audio.currentTime; if(t==='x'){o.frequency.value=440;g.gain.setValueAtTime(.25,n);g.gain.linearRampToValueAtTime(.01,n+.15);o.start(n);o.stop(n+.15);} if(t==='o'){o.frequency.value=660;g.gain.setValueAtTime(.25,n);g.gain.linearRampToValueAtTime(.01,n+.15);o.start(n);o.stop(n+.15);} if(t==='win'){o.frequency.value=523;o.start(n);o.stop(n+.2);setTimeout(()=>{let o2=audio.createOscillator(),g2=audio.createGain();o2.connect(g2);g2.connect(audio.destination);o2.frequency.value=784;g2.gain.setValueAtTime(.3,audio.currentTime);o2.start();o2.stop(audio.currentTime+.3)},150);} if(t==='draw'){o.frequency.value=150;o.type='sawtooth';o.start(n);o.stop(n+.4);} if(t==='click'){o.frequency.value=800;g.gain.setValueAtTime(.15,n);o.start(n);o.stop(n+.07);} }catch(e){} }
 function show(id){ document.querySelectorAll('.step').forEach(s=>s.classList.remove('show')); $(id).classList.add('show'); }
 function winCheck(b){ const L=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]; for(let l of L){ if(b[l[0]]&&b[l[0]]===b[l[1]]&&b[l[0]]===b[l[2]]) return {w:b[l[0]],line:l}; } if(b.every(v=>v)) return {w:'D'}; return null; }
 
-async function createBin(data){
- const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
- const j=await res.json(); return j.id;
-}
-async function getBin(id){
- const res=await fetch(API+'/'+id); if(!res.ok) throw new Error('not found'); return await res.json();
-}
-async function updateBin(id,data){
- await fetch(API+'/'+id,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
-}
+// ===== BOT =====
+function initBot(){ bBoard=Array(9).fill(''); bTurn=bRound%2===0?'X':'O'; bOver=false; bHist=[]; renderBot(); $('bStatus').textContent=bTurn==='X'?'Giliran kamu (X)':'Bot mulai (O)'; if(bTurn==='O') setTimeout(botMove,600); }
+function renderBot(){ const el=$('bBoard'); el.innerHTML=''; const win=winCheck(bBoard); bBoard.forEach((v,i)=>{ let d=document.createElement('div'); d.className='cell '+(v?v.toLowerCase():''); if(win&&win.line&&win.line.includes(i)) d.classList.add('win'); d.textContent=v; d.onclick=()=>{ if(bOver||win||bBoard[i]||bTurn!=='X') return; bHist.push([...bBoard]); bBoard[i]='X'; initAudio(); sound('x'); let w=winCheck(bBoard); renderBot(); if(w){botEnd(w);return;} bTurn='O'; $('bStatus').textContent='Bot mikir...'; setTimeout(botMove,500); }; el.appendChild(d); }); $('bp1').classList.toggle('on',bTurn==='X'); $('bp2').classList.toggle('on',bTurn==='O'); }
+function botEnd(w){ bOver=true; if(w.w!=='D') bScores[w.w]++; if(w.w==='D'){sound('draw');$('bStatus').textContent='🤝 Seri!';}else{sound('win');$('bStatus').textContent=w.w+' MENANG!';} $('bp1s').textContent='X '+bScores.X; $('bp2s').textContent='O '+bScores.O; }
+function botMove(){ if(bOver) return; let w=winCheck(bBoard); if(w){botEnd(w);return;} function find(p){ for(let i=0;i<9;i++){ if(!bBoard[i]){ bBoard[i]=p; let r=winCheck(bBoard); bBoard[i]=''; if(r&&r.w===p) return i; } } return null; } let m=find('O')||find('X'); if(m===null){ let e=bBoard.map((v,i)=>!v?i:null).filter(v=>v!==null); m=e[Math.floor(Math.random()*e.length)]; } bHist.push([...bBoard]); bBoard[m]='O'; initAudio(); sound('o'); w=winCheck(bBoard); renderBot(); if(w){botEnd(w);return;} bTurn='X'; $('bStatus').textContent='Giliran kamu'; }
 
-function render(){
- const el=$('gBoard'); el.innerHTML=''; const win=winCheck(board);
- board.forEach((v,i)=>{
-  let d=document.createElement('div'); d.className='cell '+(v?v.toLowerCase():''); if(win&&win.line&&win.line.includes(i)) d.classList.add('win'); d.textContent=v;
-  let myTurn=myMark===turn; if(!myTurn||win) d.style.opacity='.5';
-  d.onclick=async ()=>{
-   if(board[i]||win||!myTurn) return;
-   board[i]=myMark; lastBoard=JSON.stringify(board); initAudio(); sound(myMark==='X'?'x':'o');
-   let w=winCheck(board); if(w&&w.w!=='D') scores[w.w]++;
-   render();
-   try{ const cur=await getBin(binId); cur.board=board; cur.turn=turn==='X'?'O':'X'; cur.win=w; cur.scores=scores; cur.lastMark=myMark; await updateBin(binId,cur); }catch(e){}
-  };
-  el.appendChild(d);
- });
- $('gp1').classList.toggle('on',turn==='X'); $('gp2').classList.toggle('on',turn==='O');
- $('gp1s').textContent='X '+scores.X; $('gp2s').textContent='O '+scores.O;
- if(win){ $('gStatus').textContent=win.w==='D'?'🤝 Seri!': '🏆 '+win.w+' MENANG!'; $('btnRematch').style.display='block'; if(win.w==='D') sound('draw'); else sound('win'); } else { $('gStatus').textContent='Giliran '+turn+' (Kamu '+myMark+') - Server SG'; }
-}
-
-async function startPoll(){
- if(pollTimer) clearInterval(pollTimer);
- pollTimer=setInterval(async ()=>{
-  try{
-   const data=await getBin(binId);
-   const nb=JSON.stringify(data.board);
-   if(nb!==lastBoard){
-    if(data.lastMark&&data.lastMark!==myMark){ initAudio(); sound(data.lastMark==='X'?'x':'o'); }
-    board=data.board||board; turn=data.turn||turn; scores=data.scores||scores; lastBoard=nb;
-    if(data.p1) $('gp1n').textContent=data.p1; if(data.p2) $('gp2n').textContent=data.p2;
-    render();
-    if($('sWait').classList.contains('show')){ show('sGame'); }
-   }
-  }catch(e){ console.log('poll error',e); }
- },1500);
-}
+// ===== ONLINE NTFY =====
+function renderOn(){ const el=$('gBoard'); el.innerHTML=''; const win=winCheck(board); board.forEach((v,i)=>{ let d=document.createElement('div'); d.className='cell '+(v?v.toLowerCase():''); if(win&&win.line&&win.line.includes(i)) d.classList.add('win'); d.textContent=v; let myTurn=myMark===turn; if(!myTurn||win) d.style.opacity='.5'; d.onclick=()=>{ if(board[i]||win||!myTurn) return; board[i]=myMark; initAudio(); sound(myMark==='X'?'x':'o'); let w=winCheck(board); if(w&&w.w!=='D') scores[w.w]++; renderOn(); sendState(); }; el.appendChild(d); }); $('gp1').classList.toggle('on',turn==='X'); $('gp2').classList.toggle('on',turn==='O'); $('gp1s').textContent='X '+scores.X; $('gp2s').textContent='O '+scores.O; if(win){ $('gStatus').textContent=win.w==='D'?'🤝 Seri!':'🏆 '+win.w+' MENANG!'; $('btnRematch').style.display='block'; if(win.w==='D') sound('draw'); else sound('win'); } else { $('gStatus').textContent='Giliran '+turn+' (Kamu '+myMark+')'; } }
+function topic(){ return 'tama-pontianak-v053-'+roomId; }
+async function sendState(){ const payload={board:board,turn:turn==='X'?'O':'X',scores:scores,lastMark:myMark,from:username}; try{ await fetch('https://ntfy.sh/'+topic(),{method:'POST',body:JSON.stringify(payload)}); }catch(e){} turn=payload.turn; renderOn(); }
+function startListen(){ if(evtSource) evtSource.close(); evtSource=new EventSource('https://ntfy.sh/'+topic()+'/sse'); evtSource.onmessage=(e)=>{ try{ const d=JSON.parse(e.data); if(d.message){ const p=JSON.parse(d.message); if(p.from===username) return; if(p.board){ if(p.lastMark&&p.lastMark!==myMark){ initAudio(); sound(p.lastMark==='X'?'x':'o'); } board=p.board; turn=p.turn; scores=p.scores||scores; renderOn(); if($('sWait').classList.contains('show')) show('sGame'); } if(p.type==='join'){ $('gp2n').textContent=p.from; fetch('https://ntfy.sh/'+topic(),{method:'POST',body:JSON.stringify({p1:username,p2:p.from,type:'joined'})}); show('sGame'); } } }catch(err){} }; }
 
 document.addEventListener('DOMContentLoaded',()=>{
  $('btnUser').addEventListener('click',()=>{ const v=$('inpUser').value.trim(); if(v.length<2){alert('Username min 2');return;} username=v; $('hiUser').textContent='HALO '+v.toUpperCase(); show('sMenu'); try{initAudio();sound('click');}catch(e){} });
+ $('btnBot').addEventListener('click',()=>{ show('sBot'); $('bp1n').textContent=username; initBot(); try{sound('click')}catch(e){} });
  $('btnOnline').addEventListener('click',()=>show('sLobby'));
+ $('bBack').addEventListener('click',()=>show('sMenu'));
  $('lBack').addEventListener('click',()=>show('sMenu'));
- $('wBack').addEventListener('click',()=>{ if(pollTimer) clearInterval(pollTimer); show('sLobby'); });
- $('gLeave').addEventListener('click',()=>{ if(pollTimer) clearInterval(pollTimer); location.reload(); });
- $('btnCreate').addEventListener('click',async ()=>{
-  const code=Math.random().toString(36).substring(2,6).toUpperCase();
-  roomId=code; myMark='X'; board=Array(9).fill(''); turn='X'; scores={X:0,O:0}; lastBoard=JSON.stringify(board);
-  $('roomCode').textContent=code; show('sWait'); $('wStatus').innerHTML='<span class="dot"></span>Buat server SG...';
-  try{
-   const data={code:code,p1:username,board:board,turn:'X',scores:scores,created:Date.now()};
-   binId=await createBin(data);
-   localStorage.setItem('tama_bin_'+code,binId);
-   $('wStatus').innerHTML='<span class="dot"></span>✅ Room '+code+' AKTIF! Bin ID: '+binId.substring(0,8)+'... Share kode '+code+' ke teman!';
-   $('gp1n').textContent=username; $('gp2n').textContent='Menunggu...';
-   startPoll();
-  }catch(e){ $('wStatus').textContent='Gagal bikin room: '+e.message; }
-  try{initAudio();sound('click');}catch(e){}
- });
- $('btnCopy').addEventListener('click',()=>{ navigator.clipboard.writeText($('roomCode').textContent); $('btnCopy').textContent='COPIED!'; setTimeout(()=>$('btnCopy').textContent='COPY',1000); });
- $('btnJoin').addEventListener('click',async ()=>{
-  const code=$('inpRoom').value.trim().toUpperCase(); if(!code){alert('Isi kode');return;}
-  roomId=code; myMark='O';
-  $('gStatus').textContent='Cari room '+code+'...';
-  // Cari binId dari localStorage teman yang buat? Kalau beda HP, kita perlu list. Untuk Pontianak V0.5.1, host kirim BinID juga.
-  // Solusi: host share 2 kode: CODE dan BIN ID. Atau kita scan nPoint terbaru.
-  // Kita bikin join dengan cara: minta Bin ID dari host (host copy)
-  const saved=localStorage.getItem('tama_bin_'+code);
-  if(saved){ binId=saved; }
-  else {
-   const inputBin=prompt('Tempel BIN ID dari teman (yang muncul setelah buat room, contoh: 8a9b7c6d...). Host lihat di bawah room code. Kalau host di HP lain, suruh host kirim Bin ID:\n\nAtau kalau 1 HP, bin otomatis kesimpen. Kalau beda HP, butuh Bin ID.');
-   if(!inputBin){ alert('Butuh Bin ID buat join jarak jauh. Suruh host klik COPY dan kirim Bin ID lengkap.'); return; }
-   binId=inputBin.trim();
-  }
-  show('sGame');
-  try{
-   const data=await getBin(binId);
-   board=data.board; turn=data.turn; scores=data.scores||{X:0,O:0};
-   await updateBin(binId,{...data,p2:username});
-   $('gp1n').textContent=data.p1; $('gp2n').textContent=username;
-   lastBoard=JSON.stringify(board); render(); startPoll();
-  }catch(e){ alert('Room tidak ketemu di server SG. Pastikan Bin ID benar. Error: '+e.message); show('sLobby'); }
- });
- $('btnRematch').addEventListener('click',async ()=>{
-  board=Array(9).fill(''); turn='X'; lastBoard=JSON.stringify(board);
-  try{ const data=await getBin(binId); data.board=board; data.turn='X'; data.win=null; await updateBin(binId,data); }catch(e){}
-  render(); $('btnRematch').style.display='none';
- });
+ $('wBack').addEventListener('click',()=>{ if(evtSource) evtSource.close(); show('sLobby'); });
+ $('gLeave').addEventListener('click',()=>{ if(evtSource) evtSource.close(); location.reload(); });
+ $('bReset').addEventListener('click',()=>{ bRound++; initBot(); try{sound('click')}catch(e){} });
+ $('bUndo').addEventListener('click',()=>{ if(!bHist.length||bOver) return; bBoard=bHist.pop(); bTurn='X'; bOver=false; renderBot(); $('bStatus').textContent='Giliran kamu'; });
+ $('btnCreate').addEventListener('click',()=>{ roomId=Math.random().toString(36).substring(2,6).toUpperCase(); myMark='X'; board=Array(9).fill(''); turn='X'; scores={X:0,O:0}; $('roomCode').textContent=roomId; $('gp1n').textContent=username; $('gp2n').textContent='Menunggu...'; show('sWait'); $('wStatus').innerHTML='<span class="dot"></span>✅ Room '+roomId+' AKTIF! Share kode ini!'; startListen(); try{initAudio();sound('click');}catch(e){} });
+ $('btnCopy').addEventListener('click',()=>{ navigator.clipboard.writeText($('roomCode').textContent); $('btnCopy').textContent='COPIED!'; setTimeout(()=>$('btnCopy').textContent='COPY KODE',1000); });
+ $('btnJoin').addEventListener('click',()=>{ const c=$('inpRoom').value.trim().toUpperCase(); if(!c){alert('Isi kode');return;} roomId=c; myMark='O'; show('sGame'); $('gStatus').textContent='Join '+c+'...'; $('gp1n').textContent='Host'; $('gp2n').textContent=username; startListen(); setTimeout(()=>{ fetch('https://ntfy.sh/'+topic(),{method:'POST',body:JSON.stringify({type:'join',from:username})}); },800); });
+ $('btnRematch').addEventListener('click',()=>{ board=Array(9).fill(''); turn='X'; renderOn(); sendState(); $('btnRematch').style.display='none'; });
 });
 </script>
 </body>
