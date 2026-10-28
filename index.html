@@ -99,50 +99,108 @@ $('btnJoin').onclick=()=>{let c=$('inpRoom').value.trim().toUpperCase();if(!c){a
 let to=null;
 function initPeer(customId){
  if(peer)try{peer.destroy()}catch(e){}
- const cfg={config:{iceServers:[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"},{urls:"stun:stun2.l.google.com:19302"},{urls:"turn:openrelay.metered.ca:80",username:"openrelayproject",credential:"openrelayproject"},{urls:"turn:openrelay.metered.ca:443",username:"openrelayproject",credential:"openrelayproject"},{urls:"turn:openrelay.metered.ca:443?transport=tcp",username:"openrelayproject",credential:"openrelayproject"},{urls:"turn:global.relay.metered.ca:80",username:"e8dd65d5d0b4e4c2daf7a8d9",credential:"x7a9b8c7d6e5f4g3h"},{urls:"turn:global.relay.metered.ca:443",username:"e8dd65d5d0b4e4c2daf7a8d9",credential:"x7a9b8c7d6e5f4g3h"}],iceTransportPolicy:'all',iceCandidatePoolSize:10,sdpSemantics:'unified-plan'},debug:1};
- peer=customId?new Peer(customId,cfg):new Peer(cfg);
- $('gameStatus').innerHTML='<span class="dot"></span>Konek TURN SG (Pontianak)...';$('waitStatus').innerHTML='<span class="dot"></span>Siap - TURN SG aktif';
- to=setTimeout(()=>{alert('Gagal konek, buat room baru lagi ya (Pontianak server sibuk)');showStep('stepLobby');},35000);
- peer.on('open',id=>{clearTimeout(to);if(!isHost){let t=0;function tc(){t++;if(t>6){alert('Room gak ketemu, cek kode lagi');showStep('stepLobby');return;}$('gameStatus').innerHTML='<span class="dot"></span>Nyoba connect '+t+'/6...';try{let c=peer.connect(roomId,{reliable:true,config:cfg.config});setupConn(c);showStep('stepGame');setTimeout(()=>{if(!conn||!conn.open)tc();},4000);}catch(e){setTimeout(tc,2000);}}tc();}});
- peer.on('connection',c=>{if(isHost){clearTimeout(to);setupConn(c);}});
- peer.on('error',e=>{console.log(e);});
-}
-function setupConn(c){conn=c;conn.on('open',()=>{if(isHost){setTimeout(()=>conn.send({type:'hello',name:myUsername}),300);startHost();}else conn.send({type:'join',name:myUsername});});conn.on('data',d=>handleData(d));}
-function handleData(d){
- if(d.type==='join'&&isHost){showStep('stepGame');$('p1Name').textContent=myUsername;$('p2Name').textContent=d.name;initOnline();}
- if(d.type==='hello'&&!isHost){$('p1Name').textContent=d.name;$('p2Name').textContent=myUsername;initOnline();}
- if(d.type==='move'){board=d.board;turn=d.turn;gameOver=d.gameOver;if(d.mark==='X')playSound('x');else if(d.mark==='O')playSound('o');renderOnline(d.win);}
- if(d.type==='rematch'){gameRound++;playSound('click');initOnline();}
-}
-function startHost(){showStep('stepGame');$('p1Name').textContent=myUsername;initOnline();}
-function initOnline(){board=Array(9).fill('');turn=(gameRound%2===0)?'X':'O';gameOver=false;$('btnRematch').style.display='none';renderOnline();}
-function renderOnline(winParam){
- let bEl=$('board');bEl.innerHTML='';let win=winParam||checkWin(board);
- board.forEach((v,i)=>{
-  let cell=document.createElement('div');cell.className='cell'+(v?' '+v.toLowerCase():'');if(win&&win.line&&win.line.includes(i))cell.classList.add('win');cell.textContent=v;
-  let can=!gameOver&&!win&&((isHost&&turn==='X')||(!isHost&&turn==='O'));if(!can)cell.style.opacity='.55';
-  cell.onclick=()=>{
-   if(board[i]||gameOver||win)return;
-   if(isHost&&turn!=='X')return;if(!isHost&&turn!=='O')return;
-   board[i]=myMark;if(myMark==='X')playSound('x');else playSound('o');
-   let w=checkWin(board);
-   if(w){gameOver=true;if(w.winner!=='D')scores[w.winner]++;if(w.winner==='D')playSound('draw');else playSound('win');}else turn=turn==='X'?'O':'X';
-   renderOnline(w);
-   if(conn&&conn.open)conn.send({type:'move',board:board,turn:turn,gameOver:gameOver,win:w,mark:myMark});
-  };
-  bEl.appendChild(cell);
+ const cfg={
+  config:{
+   iceServers:[
+    {urls:"stun:stun.l.google.com:19302"},
+    {urls:"stun:stun1.l.google.com:19302"},
+    {urls:"turn:openrelay.metered.ca:80",username:"openrelayproject",credential:"openrelayproject"},
+    {urls:"turn:openrelay.metered.ca:443",username:"openrelayproject",credential:"openrelayproject"},
+    {urls:"turn:openrelay.metered.ca:443?transport=tcp",username:"openrelayproject",credential:"openrelayproject"}
+   ],
+   iceTransportPolicy:'all',
+   iceCandidatePoolSize:10
+  }
+ };
+ 
+ // Kalau jadi HOST, pake custom ID
+ if(customId){
+  peer=new Peer(customId,cfg);
+  $('gameStatus').innerHTML='<span class="dot"></span>Buat room '+customId+'...';
+  $('waitStatus').innerHTML='<span class="dot"></span>Room siap, share kode!';
+  peer.on('open',id=>{
+   console.log('Host ready:',id);
+   clearTimeout(to);
+   $('waitStatus').innerHTML='<span class="dot"></span>✅ Room '+id+' AKTIF - Suruh teman join sekarang!';
+  });
+  peer.on('connection',c=>{
+   clearTimeout(to);
+   console.log('Ada yang join!');
+   $('waitStatus').innerHTML='<span class="dot"></span>Teman ditemukan! Masuk...';
+   setupConn(c);
+  });
+  peer.on('error',e=>{
+   console.log('Host error:',e);
+   if(e.type==='unavailable-id'){
+    alert('Kode '+customId+' lagi dipake, bikin baru lagi');
+    showStep('stepLobby');
+   }
+  });
+  // Timeout 60 detik buat host
+  to=setTimeout(()=>{
+   $('waitStatus').innerHTML='<span class="dot"></span>⌛ Lama nunggu, coba buat room baru';
+  },60000);
+  return;
+ }
+
+ // Kalau jadi GUEST (Join)
+ peer=new Peer(cfg);
+ $('gameStatus').innerHTML='<span class="dot"></span>Siap join...';
+ 
+ peer.on('open',myId=>{
+  console.log('Guest ID:',myId,' mau join:',roomId);
+  clearTimeout(to);
+  $('gameStatus').innerHTML='<span class="dot"></span>Cari room '+roomId+'...';
+  
+  let attempts=0;
+  function tryConnect(){
+   attempts++;
+   if(attempts>8){
+    alert('Room '+roomId+' gak ketemu. Pastikan teman sudah buat room dan kode bener. Kode harus HURUF BESAR!');
+    showStep('stepLobby');
+    return;
+   }
+   $('gameStatus').innerHTML='<span class="dot"></span>Connect ke '+roomId+'... ('+attempts+'/8)';
+   try{
+    const c=peer.connect(roomId,{
+     reliable:true,
+     serialization:'json'
+    });
+    
+    let connected=false;
+    c.on('open',()=>{
+     connected=true;
+     console.log('Connected to host!');
+     setupConn(c);
+     showStep('stepGame');
+    });
+    c.on('error',err=>{
+     console.log('Connect error:',err);
+     if(!connected) setTimeout(tryConnect,2500);
+    });
+    
+    // Kalau 4 detik gak connect, coba lagi
+    setTimeout(()=>{
+     if(!connected) tryConnect();
+    },4000);
+    
+   }catch(e){
+    console.log('Catch error:',e);
+    setTimeout(tryConnect,2000);
+   }
+  }
+  
+  // Tunggu 1 detik biar PeerJS siap, baru connect
+  setTimeout(tryConnect,1000);
  });
- if(win&&win.line)drawLine(bEl,win.line);
- $('p1Box').classList.toggle('active',turn==='X');$('p2Box').classList.toggle('active',turn==='O');
- $('p1Mark').textContent='X • '+scores.X;$('p2Mark').textContent='O • '+scores.O;
- if(win){
-  if(win.winner==='D')$('gameStatus').innerHTML='🤝 Seri!';else $('gameStatus').innerHTML='🏆 '+win.winner+' MENANG!';
-  $('btnRematch').style.display='block';
- }else{$('gameStatus').innerHTML='<span class="dot"></span>Giliran '+turn;$('btnRematch').style.display='none';}
+
+ peer.on('error',e=>{
+  console.log('Guest peer error:',e);
+  $('gameStatus').innerHTML='<span class="dot"></span>Error: '+e.type;
+ });
+
+ to=setTimeout(()=>{
+  alert('Timeout - PeerJS lagi sibuk, coba lagi 1 menit lagi');
+  showStep('stepLobby');
+ },40000);
 }
-$('btnRematch').onclick=()=>{gameRound++;playSound('click');initOnline();if(conn&&conn.open)conn.send({type:'rematch'});};
-$('btnLeave').onclick=()=>{playSound('click');setTimeout(()=>location.reload(),150);};
-});
-</script>
-</body>
-</html>
