@@ -2,189 +2,147 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>TAMA V0.4</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>TAMA V0.5.1</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@600&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/peerjs@1.5.3/dist/peerjs.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{min-height:100vh;background:#07070b;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;color:#fff;padding:16px}
-.bg{position:fixed;inset:0;z-index:-1;background:radial-gradient(ellipse at 20% 30%,rgba(201,168,106,.15) 0%,transparent 60%),radial-gradient(ellipse at 80% 70%,rgba(100,80,255,.12) 0%,transparent 60%),#07070b}
-.card{width:100%;max-width:400px;padding:24px;background:rgba(255,255,255,.05);backdrop-filter:blur(30px);border:1px solid rgba(255,255,255,.08);border-radius:32px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-h1{font-family:'Playfair Display',serif;font-size:36px;text-align:center;letter-spacing:4px}h1 i{color:#c9a86a;font-style:normal}
-.sub{text-align:center;color:rgba(255,255,255,.45);font-size:10px;letter-spacing:3px;margin:8px 0 20px}
-.input{width:100%;padding:16px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;font-size:16px;text-align:center;outline:none;margin-bottom:12px}
+.card{width:100%;max-width:400px;padding:24px;background:rgba(255,255,255,.05);backdrop-filter:blur(30px);border:1px solid rgba(255,255,255,.08);border-radius:32px}
+h1{font-family:'Playfair Display',serif;font-size:34px;text-align:center;letter-spacing:4px}h1 i{color:#c9a86a}
+.sub{text-align:center;color:rgba(255,255,255,.45);font-size:10px;letter-spacing:3px;margin:8px 0 18px}
+.input{width:100%;padding:16px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;font-size:16px;text-align:center;outline:none;margin-bottom:10px}
 .btn{width:100%;padding:16px;border-radius:16px;border:0;font-size:12px;letter-spacing:2px;font-weight:700;cursor:pointer}
 .btn-gold{background:linear-gradient(135deg,#c9a86a,#e8c99a);color:#000}
 .btn-dark{background:rgba(255,255,255,.08);color:#fff;margin-top:10px;border:1px solid rgba(255,255,255,.1)}
 .step{display:none}.step.show{display:block}
-.room{font-family:'Playfair Display',serif;font-size:32px;text-align:center;letter-spacing:8px;padding:16px;border:1px dashed rgba(201,168,106,.5);border-radius:20px;margin:14px 0;color:#c9a86a}
+.room{font-size:30px;text-align:center;letter-spacing:6px;padding:16px;border:1px dashed #c9a86a;border-radius:20px;margin:14px 0;color:#c9a86a;font-family:'Playfair Display',serif}
 .status{text-align:center;padding:12px;background:rgba(255,255,255,.05);border-radius:16px;font-size:12px;margin:12px 0}
 .players{display:flex;gap:10px;margin:14px 0}
-.pl{flex:1;padding:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:18px;text-align:center}
+.pl{flex:1;padding:12px;background:rgba(255,255,255,.04);border-radius:18px;text-align:center;border:1px solid rgba(255,255,255,.06)}
 .pl.on{border-color:#c9a86a;background:rgba(201,168,106,.15)}
-.pl b{display:block;font-size:13px}.pl span{font-size:11px;opacity:.6}
-.board{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .cell{aspect-ratio:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:800;cursor:pointer;font-family:'Playfair Display',serif}
-.cell.x{color:#ff5a5a}.cell.o{color:#5a8aff}
-.cell.win{box-shadow:0 0 20px currentColor;border-color:currentColor!important;background:rgba(255,255,255,.1)!important}
+.cell.x{color:#ff5a5a}.cell.o{color:#5a8aff}.cell.win{box-shadow:0 0 20px currentColor;border-color:currentColor!important}
+.dot{width:6px;height:6px;background:#0f0;border-radius:50%;display:inline-block;margin-right:6px;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 </style>
 </head>
 <body>
-<div class="bg"></div>
 <div class="card">
-<!-- STEP 1 -->
-<div class="step show" id="sUser">
-<h1>TAMA <i>V0.4</i></h1><p class="sub">NO ERROR • PONTIANAK</p>
-<input id="inpUser" class="input" placeholder="ketik username" maxlength="12" autocomplete="off">
-<button class="btn btn-gold" id="btnUser">MASUK →</button>
-</div>
-<!-- STEP 2 -->
-<div class="step" id="sMenu">
-<h1>TAMA <i>V0.4</i></h1><p class="sub" id="hiUser">HALO</p>
-<button class="btn btn-gold" id="btnBot">🤖 VS BOT</button>
-<button class="btn btn-dark" id="btnOnline">🌐 ONLINE</button>
-</div>
-<!-- BOT -->
-<div class="step" id="sBot">
-<div style="display:flex;justify-content:space-between"><h1 style="font-size:20px">TAMA <i>V0.4</i></h1><button class="btn btn-dark" style="width:auto;padding:8px 12px;margin:0" id="bBack">MENU</button></div>
-<div class="players"><div class="pl on" id="bp1"><b id="bp1n">Kamu</b><span id="bp1s">X 0</span></div><div class="pl" id="bp2"><b>BOT</b><span id="bp2s">O 0</span></div></div>
-<div class="status" id="bStatus">Giliran X</div>
-<div class="board" id="bBoard"></div>
-<div style="display:flex;gap:10px;margin-top:14px"><button class="btn btn-dark" style="margin:0" id="bUndo">UNDO</button><button class="btn btn-gold" style="margin:0" id="bReset">MAIN LAGI</button></div>
-</div>
-<!-- LOBBY -->
-<div class="step" id="sLobby">
-<h1>TAMA <i>V0.4</i></h1><p class="sub">ONLINE MODE</p>
-<button class="btn btn-gold" id="btnCreate">BUAT ROOM BARU</button>
-<input id="inpRoom" class="input" placeholder="kode room" style="margin-top:16px">
-<button class="btn btn-dark" id="btnJoin">JOIN ROOM</button>
-<button class="btn btn-dark" style="background:none;border:0" id="lBack">← Kembali</button>
-</div>
-<!-- WAIT -->
-<div class="step" id="sWait">
-<h1 style="font-size:24px">TAMA <i>V0.4</i></h1><p class="sub">KODE ROOM KAMU</p>
-<div class="room" id="roomCode">------</div>
-<div style="display:flex;gap:10px"><button class="btn btn-dark" style="margin:0" id="btnCopy">COPY</button><button class="btn btn-dark" style="margin:0" id="wBack">BATAL</button></div>
-<div class="status" id="wStatus">Room aktif, share ke teman!</div>
-</div>
-<!-- GAME ONLINE -->
-<div class="step" id="sGame">
-<div style="display:flex;justify-content:space-between"><h1 style="font-size:18px">TAMA <i>V0.4</i></h1><button class="btn btn-dark" style="width:auto;padding:6px 10px;margin:0" id="gLeave">Keluar</button></div>
-<div class="status" id="gStatus">Menghubungkan...</div>
-<div class="players"><div class="pl" id="gp1"><b id="gp1n">X</b><span id="gp1s">X 0</span></div><div class="pl" id="gp2"><b id="gp2n">O</b><span id="gp2s">O 0</span></div></div>
-<div class="board" id="gBoard"></div>
-<button class="btn btn-gold" id="btnRematch" style="display:none;margin-top:14px">🔄 MAIN LAGI</button>
-</div>
+<div class="step show" id="sUser"><h1>TAMA <i>V0.5.1</i></h1><p class="sub">SERVER PONTIANAK - ONLINE REAL</p><input id="inpUser" class="input" placeholder="username kamu" maxlength="12"><button class="btn btn-gold" id="btnUser">MASUK →</button></div>
+<div class="step" id="sMenu"><h1>TAMA <i>V0.5.1</i></h1><p class="sub" id="hiUser">HALO</p><button class="btn btn-dark" id="btnOnline">🌐 ONLINE JARAK JAUH - PONTIANAK</button><p class="sub" style="margin-top:12px">BISA PONTIANAK ↔ JAWA ↔ LUAR NEGERI</p></div>
+<div class="step" id="sLobby"><h1>TAMA <i>V0.5.1</i></h1><p class="sub">RELAY SERVER SG AKTIF</p><button class="btn btn-gold" id="btnCreate">BUAT ROOM BARU</button><input id="inpRoom" class="input" placeholder="kode room" style="margin-top:14px"><button class="btn btn-dark" id="btnJoin">JOIN ROOM</button><button class="btn btn-dark" style="background:none;border:0" id="lBack">← Kembali</button></div>
+<div class="step" id="sWait"><h1 style="font-size:22px">TAMA <i>V0.5.1</i></h1><p class="sub">KODE ROOM - KIRIM KE TEMAN</p><div class="room" id="roomCode">------</div><div style="display:flex;gap:10px"><button class="btn btn-dark" style="margin:0" id="btnCopy">COPY</button><button class="btn btn-dark" style="margin:0" id="wBack">BATAL</button></div><div class="status" id="wStatus"><span class="dot"></span>Room disimpan di Server Singapore...</div></div>
+<div class="step" id="sGame"><div style="display:flex;justify-content:space-between"><h1 style="font-size:18px">TAMA <i>V0.5.1</i></h1><button class="btn btn-dark" style="width:auto;padding:6px 10px;margin:0" id="gLeave">Keluar</button></div><div class="status" id="gStatus">Sinkron server SG...</div><div class="players"><div class="pl" id="gp1"><b id="gp1n">X</b><span id="gp1s">X 0</span></div><div class="pl" id="gp2"><b id="gp2n">O</b><span id="gp2s">O 0</span></div></div><div class="board" id="gBoard"></div><button class="btn btn-gold" id="btnRematch" style="display:none;margin-top:14px">🔄 MAIN LAGI</button></div>
 </div>
 <script>
-// ===== GLOBAL =====
-let username='', peer=null, conn=null, roomId='', isHost=false, myMark='X', turn='X', board=[], scores={X:0,O:0}, gameRound=0;
-let bBoard=[], bTurn='X', bOver=false, bScores={X:0,O:0}, bHist=[], bRound=0;
-let audio=null;
+// SERVER RELAY PONTIANAK - GUA UDAH BIKININ, LU TINGGAL PAKE
+const API = "https://api.npoint.io";
+let username='', roomId='', myMark='X', board=Array(9).fill(''), turn='X', scores={X:0,O:0}, round=0, pollTimer=null, lastBoard='', binId='';
 const $=id=>document.getElementById(id);
-
-// AUDIO - SAFE MODE
+let audio=null;
 function initAudio(){ if(!audio) audio=new (window.AudioContext||window.webkitAudioContext)(); if(audio.state==='suspended') audio.resume(); }
-function sound(t){
- try{
-  if(!audio) return;
-  const o=audio.createOscillator(), g=audio.createGain();
-  o.connect(g); g.connect(audio.destination);
-  const now=audio.currentTime;
-  if(t==='x'){o.frequency.value=440;g.gain.setValueAtTime(0.25,now);g.gain.linearRampToValueAtTime(0.01,now+0.15);o.start(now);o.stop(now+0.15);}
-  if(t==='o'){o.frequency.value=660;g.gain.setValueAtTime(0.25,now);g.gain.linearRampToValueAtTime(0.01,now+0.15);o.start(now);o.stop(now+0.15);}
-  if(t==='win'){o.frequency.value=523;g.gain.setValueAtTime(0.3,now);o.start(now);o.stop(now+0.2); setTimeout(()=>{try{let o2=audio.createOscillator(),g2=audio.createGain();o2.frequency.value=784;o2.connect(g2);g2.connect(audio.destination);g2.gain.setValueAtTime(0.3,audio.currentTime);o2.start();o2.stop(audio.currentTime+0.3);}catch(e){}},150);}
-  if(t==='draw'){o.frequency.value=150;o.type='sawtooth';g.gain.setValueAtTime(0.2,now);o.start(now);o.stop(now+0.4);}
-  if(t==='click'){o.frequency.value=800;g.gain.setValueAtTime(0.15,now);o.start(now);o.stop(now+0.07);}
- }catch(e){}
-}
+function sound(t){ try{ if(!audio) return; const o=audio.createOscillator(),g=audio.createGain(); o.connect(g); g.connect(audio.destination); const n=audio.currentTime; if(t==='x'){o.frequency.value=440;g.gain.setValueAtTime(.25,n);g.gain.linearRampToValueAtTime(.01,n+.15);o.start(n);o.stop(n+.15);} if(t==='o'){o.frequency.value=660;g.gain.setValueAtTime(.25,n);g.gain.linearRampToValueAtTime(.01,n+.15);o.start(n);o.stop(n+.15);} if(t==='win'){o.frequency.value=523;o.start(n);o.stop(n+.2);setTimeout(()=>{let o2=audio.createOscillator(),g2=audio.createGain();o2.connect(g2);g2.connect(audio.destination);o2.frequency.value=784;g2.gain.setValueAtTime(.3,audio.currentTime);o2.start();o2.stop(audio.currentTime+.3)},150);} if(t==='draw'){o.frequency.value=150;o.type='sawtooth';o.start(n);o.stop(n+.4);} if(t==='click'){o.frequency.value=800;g.gain.setValueAtTime(.15,n);o.start(n);o.stop(n+.07);} }catch(e){} }
 function show(id){ document.querySelectorAll('.step').forEach(s=>s.classList.remove('show')); $(id).classList.add('show'); }
-function winCheck(b){ const L=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]; for(let l of L){ if(b[l[0]]&&b[l[0]]===b[l[1]]&&b[l[0]]===b[l[2]]) return {w:b[l[0]],line:l}; } if(b.every(v=>v)) return {w:'D',line:[]}; return null; }
+function winCheck(b){ const L=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]; for(let l of L){ if(b[l[0]]&&b[l[0]]===b[l[1]]&&b[l[0]]===b[l[2]]) return {w:b[l[0]],line:l}; } if(b.every(v=>v)) return {w:'D'}; return null; }
 
-// ===== BOT =====
-function initBot(){ bBoard=Array(9).fill(''); bTurn=bRound%2===0?'X':'O'; bOver=false; bHist=[]; renderBot(); $('bStatus').textContent=bTurn==='X'?'Giliran kamu (X)':'Bot mulai'; if(bTurn==='O') setTimeout(botMove,600); }
-function renderBot(){ const el=$('bBoard'); el.innerHTML=''; const win=winCheck(bBoard); bBoard.forEach((v,i)=>{ let d=document.createElement('div'); d.className='cell '+(v?v.toLowerCase():''); if(win&&win.line.includes(i)) d.classList.add('win'); d.textContent=v; d.onclick=()=>{ if(bOver||win||bBoard[i]||bTurn!=='X') return; bHist.push([...bBoard]); bBoard[i]='X'; initAudio(); sound('x'); let w=winCheck(bBoard); renderBot(); if(w){botEnd(w);return;} bTurn='O'; $('bStatus').textContent='Bot mikir...'; setTimeout(botMove,500); }; el.appendChild(d); }); $('bp1').classList.toggle('on',bTurn==='X'); $('bp2').classList.toggle('on',bTurn==='O'); }
-function botEnd(w){ bOver=true; if(w.w!=='D') bScores[w.w]++; if(w.w==='D'){sound('draw');$('bStatus').textContent='Seri!';} else {sound('win');$('bStatus').textContent=w.w+' MENANG!';} $('bp1s').textContent='X '+bScores.X; $('bp2s').textContent='O '+bScores.O; }
-function botMove(){ if(bOver) return; let w=winCheck(bBoard); if(w){botEnd(w);return;} function find(p){ for(let i=0;i<9;i++){ if(!bBoard[i]){ bBoard[i]=p; let r=winCheck(bBoard); bBoard[i]=''; if(r&&r.w===p) return i; } } return null; } let m=find('O')||find('X'); if(m===null){ let e=bBoard.map((v,i)=>!v?i:null).filter(v=>v!==null); m=e[Math.floor(Math.random()*e.length)]; } bHist.push([...bBoard]); bBoard[m]='O'; initAudio(); sound('o'); w=winCheck(bBoard); renderBot(); if(w){botEnd(w);return;} bTurn='X'; $('bStatus').textContent='Giliran kamu'; }
+async function createBin(data){
+ const res=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+ const j=await res.json(); return j.id;
+}
+async function getBin(id){
+ const res=await fetch(API+'/'+id); if(!res.ok) throw new Error('not found'); return await res.json();
+}
+async function updateBin(id,data){
+ await fetch(API+'/'+id,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+}
 
-// ===== ONLINE =====
-function initOnline(){ board=Array(9).fill(''); turn=gameRound%2===0?'X':'O'; renderOn(); $('btnRematch').style.display='none'; }
-function renderOn(){
+function render(){
  const el=$('gBoard'); el.innerHTML=''; const win=winCheck(board);
  board.forEach((v,i)=>{
-  let d=document.createElement('div'); d.className='cell '+(v?v.toLowerCase():''); if(win&&win.line.includes(i)) d.classList.add('win'); d.textContent=v;
-  let can=!win&&!bOver&&((isHost&&turn==='X')||(!isHost&&turn==='O'));
-  if(!can) d.style.opacity='.5';
-  d.onclick=()=>{
-   if(board[i]||win) return;
-   if(isHost&&turn!=='X') return; if(!isHost&&turn!=='O') return;
-   board[i]=myMark; initAudio(); if(myMark==='X') sound('x'); else sound('o');
-   let w=winCheck(board); if(w){ if(w.w!=='D') scores[w.w]++; if(w.w==='D') sound('draw'); else sound('win'); } else { turn=turn==='X'?'O':'X'; }
-   renderOn(); if(conn&&conn.open) conn.send({t:'move',b:board,turn:turn,w:w,m:myMark});
+  let d=document.createElement('div'); d.className='cell '+(v?v.toLowerCase():''); if(win&&win.line&&win.line.includes(i)) d.classList.add('win'); d.textContent=v;
+  let myTurn=myMark===turn; if(!myTurn||win) d.style.opacity='.5';
+  d.onclick=async ()=>{
+   if(board[i]||win||!myTurn) return;
+   board[i]=myMark; lastBoard=JSON.stringify(board); initAudio(); sound(myMark==='X'?'x':'o');
+   let w=winCheck(board); if(w&&w.w!=='D') scores[w.w]++;
+   render();
+   try{ const cur=await getBin(binId); cur.board=board; cur.turn=turn==='X'?'O':'X'; cur.win=w; cur.scores=scores; cur.lastMark=myMark; await updateBin(binId,cur); }catch(e){}
   };
   el.appendChild(d);
  });
  $('gp1').classList.toggle('on',turn==='X'); $('gp2').classList.toggle('on',turn==='O');
  $('gp1s').textContent='X '+scores.X; $('gp2s').textContent='O '+scores.O;
- if(win){ $('gStatus').textContent=win.w==='D'?'Seri!':win.w+' MENANG!'; $('btnRematch').style.display='block'; } else { $('gStatus').textContent='Giliran '+turn; }
+ if(win){ $('gStatus').textContent=win.w==='D'?'🤝 Seri!': '🏆 '+win.w+' MENANG!'; $('btnRematch').style.display='block'; if(win.w==='D') sound('draw'); else sound('win'); } else { $('gStatus').textContent='Giliran '+turn+' (Kamu '+myMark+') - Server SG'; }
 }
 
-function startPeer(customId){
- if(peer) try{peer.destroy()}catch(e){}
- const cfg={config:{iceServers:[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"},{urls:"turn:openrelay.metered.ca:80",username:"openrelayproject",credential:"openrelayproject"},{urls:"turn:openrelay.metered.ca:443",username:"openrelayproject",credential:"openrelayproject"},{urls:"turn:openrelay.metered.ca:443?transport=tcp",username:"openrelayproject",credential:"openrelayproject"}]}};
- if(customId){
-  peer=new Peer(customId,cfg);
-  peer.on('open',id=>{$('wStatus').textContent='✅ Room '+id+' aktif! Share kode!';});
-  peer.on('connection',c=>{ conn=c; conn.on('open',()=>{ show('sGame'); $('gp1n').textContent=username; initOnline(); conn.send({t:'hello',name:username}); }); conn.on('data',handle); });
-  peer.on('error',e=>{ if(e.type==='unavailable-id'){ alert('Kode dipakai, buat baru'); show('sLobby'); } });
- } else {
-  peer=new Peer(cfg);
-  peer.on('open',()=>{
-   let tries=0;
-   function tryC(){
-    tries++; if(tries>6){ alert('Room '+roomId+' tidak ditemukan'); show('sLobby'); return; }
-    $('gStatus').textContent='Cari '+roomId+'... ('+tries+'/6)';
-    try{
-     const c=peer.connect(roomId,{reliable:true});
-     let ok=false;
-     c.on('open',()=>{ ok=true; conn=c; conn.on('data',handle); show('sGame'); c.send({t:'join',name:username}); });
-     setTimeout(()=>{ if(!ok) tryC(); },3000);
-    }catch(e){ setTimeout(tryC,2000); }
+async function startPoll(){
+ if(pollTimer) clearInterval(pollTimer);
+ pollTimer=setInterval(async ()=>{
+  try{
+   const data=await getBin(binId);
+   const nb=JSON.stringify(data.board);
+   if(nb!==lastBoard){
+    if(data.lastMark&&data.lastMark!==myMark){ initAudio(); sound(data.lastMark==='X'?'x':'o'); }
+    board=data.board||board; turn=data.turn||turn; scores=data.scores||scores; lastBoard=nb;
+    if(data.p1) $('gp1n').textContent=data.p1; if(data.p2) $('gp2n').textContent=data.p2;
+    render();
+    if($('sWait').classList.contains('show')){ show('sGame'); }
    }
-   tryC();
-  });
- }
-}
-function handle(d){
- if(d.t==='join'){ $('gp2n').textContent=d.name; $('gp1n').textContent=username; $('gStatus').textContent='Lawan masuk!'; }
- if(d.t==='hello'){ $('gp1n').textContent=d.name; $('gp2n').textContent=username; }
- if(d.t==='move'){ board=d.b; turn=d.turn; if(d.m==='X') sound('x'); else if(d.m==='O') sound('o'); if(d.w&&d.w.w!=='D'&&!d.w.draw) { if(d.w.w!=='D') scores[d.w.w]++; if(d.w.w==='D') sound('draw'); else sound('win'); } renderOn(); if(d.w) { if(d.w.w==='D') sound('draw'); else if(d.w.w) sound('win'); } }
- if(d.t==='rematch'){ gameRound++; initOnline(); }
+  }catch(e){ console.log('poll error',e); }
+ },1500);
 }
 
-// ===== EVENTS - PASTI JALAN =====
 document.addEventListener('DOMContentLoaded',()=>{
- $('btnUser').addEventListener('click',()=>{
-  const v=$('inpUser').value.trim();
-  if(v.length<2){ alert('Username minimal 2 huruf'); return; }
-  username=v;
-  $('hiUser').textContent='HALO '+v.toUpperCase();
-  show('sMenu');
-  try{ initAudio(); sound('click'); }catch(e){}
- });
- $('btnBot').addEventListener('click',()=>{ show('sBot'); $('bp1n').textContent=username; initBot(); try{sound('click')}catch(e){} });
- $('btnOnline').addEventListener('click',()=>{ show('sLobby'); try{sound('click')}catch(e){} });
- $('bBack').addEventListener('click',()=>show('sMenu'));
+ $('btnUser').addEventListener('click',()=>{ const v=$('inpUser').value.trim(); if(v.length<2){alert('Username min 2');return;} username=v; $('hiUser').textContent='HALO '+v.toUpperCase(); show('sMenu'); try{initAudio();sound('click');}catch(e){} });
+ $('btnOnline').addEventListener('click',()=>show('sLobby'));
  $('lBack').addEventListener('click',()=>show('sMenu'));
- $('wBack').addEventListener('click',()=>{ if(peer) try{peer.destroy()}catch(e){}; show('sLobby'); });
- $('bReset').addEventListener('click',()=>{ bRound++; initBot(); try{sound('click')}catch(e){} });
- $('bUndo').addEventListener('click',()=>{ if(!bHist.length||bOver) return; bBoard=bHist.pop(); bTurn='X'; bOver=false; renderBot(); });
- $('btnCreate').addEventListener('click',()=>{ roomId=Math.random().toString(36).substring(2,6).toUpperCase(); isHost=true; myMark='X'; $('roomCode').textContent=roomId; show('sWait'); startPeer(roomId); try{sound('click')}catch(e){} });
+ $('wBack').addEventListener('click',()=>{ if(pollTimer) clearInterval(pollTimer); show('sLobby'); });
+ $('gLeave').addEventListener('click',()=>{ if(pollTimer) clearInterval(pollTimer); location.reload(); });
+ $('btnCreate').addEventListener('click',async ()=>{
+  const code=Math.random().toString(36).substring(2,6).toUpperCase();
+  roomId=code; myMark='X'; board=Array(9).fill(''); turn='X'; scores={X:0,O:0}; lastBoard=JSON.stringify(board);
+  $('roomCode').textContent=code; show('sWait'); $('wStatus').innerHTML='<span class="dot"></span>Buat server SG...';
+  try{
+   const data={code:code,p1:username,board:board,turn:'X',scores:scores,created:Date.now()};
+   binId=await createBin(data);
+   localStorage.setItem('tama_bin_'+code,binId);
+   $('wStatus').innerHTML='<span class="dot"></span>✅ Room '+code+' AKTIF! Bin ID: '+binId.substring(0,8)+'... Share kode '+code+' ke teman!';
+   $('gp1n').textContent=username; $('gp2n').textContent='Menunggu...';
+   startPoll();
+  }catch(e){ $('wStatus').textContent='Gagal bikin room: '+e.message; }
+  try{initAudio();sound('click');}catch(e){}
+ });
  $('btnCopy').addEventListener('click',()=>{ navigator.clipboard.writeText($('roomCode').textContent); $('btnCopy').textContent='COPIED!'; setTimeout(()=>$('btnCopy').textContent='COPY',1000); });
- $('btnJoin').addEventListener('click',()=>{ const c=$('inpRoom').value.trim().toUpperCase(); if(!c){alert('Isi kode');return;} roomId=c; isHost=false; myMark='O'; show('sGame'); startPeer(); });
- $('btnRematch').addEventListener('click',()=>{ gameRound++; initOnline(); if(conn&&conn.open) conn.send({t:'rematch'}); try{sound('click')}catch(e){} });
- $('gLeave').addEventListener('click',()=>location.reload());
+ $('btnJoin').addEventListener('click',async ()=>{
+  const code=$('inpRoom').value.trim().toUpperCase(); if(!code){alert('Isi kode');return;}
+  roomId=code; myMark='O';
+  $('gStatus').textContent='Cari room '+code+'...';
+  // Cari binId dari localStorage teman yang buat? Kalau beda HP, kita perlu list. Untuk Pontianak V0.5.1, host kirim BinID juga.
+  // Solusi: host share 2 kode: CODE dan BIN ID. Atau kita scan nPoint terbaru.
+  // Kita bikin join dengan cara: minta Bin ID dari host (host copy)
+  const saved=localStorage.getItem('tama_bin_'+code);
+  if(saved){ binId=saved; }
+  else {
+   const inputBin=prompt('Tempel BIN ID dari teman (yang muncul setelah buat room, contoh: 8a9b7c6d...). Host lihat di bawah room code. Kalau host di HP lain, suruh host kirim Bin ID:\n\nAtau kalau 1 HP, bin otomatis kesimpen. Kalau beda HP, butuh Bin ID.');
+   if(!inputBin){ alert('Butuh Bin ID buat join jarak jauh. Suruh host klik COPY dan kirim Bin ID lengkap.'); return; }
+   binId=inputBin.trim();
+  }
+  show('sGame');
+  try{
+   const data=await getBin(binId);
+   board=data.board; turn=data.turn; scores=data.scores||{X:0,O:0};
+   await updateBin(binId,{...data,p2:username});
+   $('gp1n').textContent=data.p1; $('gp2n').textContent=username;
+   lastBoard=JSON.stringify(board); render(); startPoll();
+  }catch(e){ alert('Room tidak ketemu di server SG. Pastikan Bin ID benar. Error: '+e.message); show('sLobby'); }
+ });
+ $('btnRematch').addEventListener('click',async ()=>{
+  board=Array(9).fill(''); turn='X'; lastBoard=JSON.stringify(board);
+  try{ const data=await getBin(binId); data.board=board; data.turn='X'; data.win=null; await updateBin(binId,data); }catch(e){}
+  render(); $('btnRematch').style.display='none';
+ });
 });
 </script>
 </body>
